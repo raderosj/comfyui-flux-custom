@@ -1,4 +1,3 @@
-
 FROM runpod/base:0.6.1-cuda12.1.0
 
 ENV DEBIAN_FRONTEND=noninteractive
@@ -18,10 +17,7 @@ RUN cd /ComfyUI/custom_nodes && \
     git clone https://github.com/Suzie1/ComfyUI_Comfyroll_CustomNodes && \
     git clone https://github.com/city96/ComfyUI-GGUF && \
     git clone https://github.com/kijai/ComfyUI-KJNodes && \
-    git clone https://github.com/Fannovel16/comfyui_controlnet_aux && \
-    pip3 install -r ComfyUI_Comfyroll_CustomNodes/requirements.txt && \
-    pip3 install -r ComfyUI-GGUF/requirements.txt && \
-    pip3 install -r comfyui_controlnet_aux/requirements.txt
+    git clone https://github.com/Fannovel16/comfyui_controlnet_aux
 
 WORKDIR /ComfyUI
 EXPOSE 8188
