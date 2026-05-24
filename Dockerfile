@@ -1,9 +1,10 @@
-FROM runpod/base:0.6.1-cuda12.1.0
+FROM nvidia/cuda:12.1.0-cudnn8-runtime-ubuntu22.04
 
 ENV DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update && apt-get install -y \
-    git wget libgl1 libglib2.0-0 \
+    git wget python3 python3-pip \
+    libgl1 libglib2.0-0 \
     && rm -rf /var/lib/apt/lists/*
 
 RUN pip3 install torch torchvision torchaudio \
@@ -19,10 +20,7 @@ RUN cd /ComfyUI/custom_nodes && \
     git clone https://github.com/kijai/ComfyUI-KJNodes && \
     git clone https://github.com/Fannovel16/comfyui_controlnet_aux
 
-RUN echo '#!/bin/bash' > /start.sh && \
-    echo 'jupyter lab --ip=0.0.0.0 --port=8888 --no-browser --allow-root --NotebookApp.token="" --NotebookApp.password="" &' >> /start.sh && \
-    echo 'python3 /ComfyUI/main.py --listen 0.0.0.0 --port 8188' >> /start.sh && \
-    chmod +x /start.sh
+RUN echo '#!/bin/bash\njupyter lab --ip=0.0.0.0 --port=8888 --no-browser --allow-root --NotebookApp.token="" --NotebookApp.password="" &\npython3 /ComfyUI/main.py --listen 0.0.0.0 --port 8188' > /start.sh && chmod +x /start.sh
 
 WORKDIR /ComfyUI
 EXPOSE 8188 8888
