@@ -10,6 +10,8 @@ RUN apt-get update && apt-get install -y \
 RUN pip3 install torch torchvision torchaudio \
     --index-url https://download.pytorch.org/whl/cu121
 
+RUN pip3 install sqlalchemy jupyterlab
+
 RUN git clone https://github.com/comfyanonymous/ComfyUI /ComfyUI && \
     cd /ComfyUI && pip3 install -r requirements.txt
 
@@ -19,6 +21,9 @@ RUN cd /ComfyUI/custom_nodes && \
     git clone https://github.com/kijai/ComfyUI-KJNodes && \
     git clone https://github.com/Fannovel16/comfyui_controlnet_aux
 
+COPY start.sh /start.sh
+RUN chmod +x /start.sh
+
 WORKDIR /ComfyUI
-EXPOSE 8188
-CMD ["python3", "main.py", "--listen", "0.0.0.0", "--port", "8188"]
+EXPOSE 8188 8888
+CMD ["/start.sh"]
