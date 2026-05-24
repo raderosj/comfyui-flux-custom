@@ -19,9 +19,11 @@ RUN cd /ComfyUI/custom_nodes && \
     git clone https://github.com/kijai/ComfyUI-KJNodes && \
     git clone https://github.com/Fannovel16/comfyui_controlnet_aux
 
-COPY start.sh /comfyui_start.sh
-RUN chmod +x /comfyui_start.sh
+RUN echo '#!/bin/bash' > /start.sh && \
+    echo 'jupyter lab --ip=0.0.0.0 --port=8888 --no-browser --allow-root --NotebookApp.token="" --NotebookApp.password="" &' >> /start.sh && \
+    echo 'python3 /ComfyUI/main.py --listen 0.0.0.0 --port 8188' >> /start.sh && \
+    chmod +x /start.sh
 
 WORKDIR /ComfyUI
 EXPOSE 8188 8888
-CMD ["/comfyui_start.sh"]
+CMD ["/start.sh"]
