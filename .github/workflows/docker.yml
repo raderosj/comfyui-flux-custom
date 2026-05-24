@@ -20,4 +20,3 @@ jobs:
           context: .
           push: true
           tags: raderosj/comfyui-flux-custom:latest
-Это то менять редактировать старое на это?
