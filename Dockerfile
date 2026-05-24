@@ -3,8 +3,7 @@ FROM runpod/base:0.6.1-cuda12.1.0
 ENV DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update && apt-get install -y \
-    git wget python3 python3-pip \
-    libgl1 libglib2.0-0 \
+    git wget libgl1 libglib2.0-0 \
     && rm -rf /var/lib/apt/lists/*
 
 RUN pip3 install torch torchvision torchaudio \
@@ -20,9 +19,9 @@ RUN cd /ComfyUI/custom_nodes && \
     git clone https://github.com/kijai/ComfyUI-KJNodes && \
     git clone https://github.com/Fannovel16/comfyui_controlnet_aux
 
-COPY start.sh /start.sh
-RUN chmod +x /start.sh
+COPY start.sh /comfyui_start.sh
+RUN chmod +x /comfyui_start.sh
 
 WORKDIR /ComfyUI
 EXPOSE 8188 8888
-CMD ["/start.sh"]
+CMD ["/comfyui_start.sh"]
