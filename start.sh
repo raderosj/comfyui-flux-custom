@@ -1,6 +1,6 @@
 #!/bin/bash
 
-mkdir -p /ComfyUI/models/checkpoints
+mkdir -p /ComfyUI/models/diffusion_models
 mkdir -p /ComfyUI/models/text_encoders
 mkdir -p /ComfyUI/models/vae
 mkdir -p /ComfyUI/models/controlnet
@@ -10,9 +10,9 @@ pip install gdown -q
 
 echo "📥 Скачиваем модели..."
 
-gdown "1UHHCpgtcZjt1Aj3ouznSuJjuLB6c34dt" -O /ComfyUI/models/checkpoints/flux1-dev-fp8.safetensors
-gdown "1glgsmQB0gE2x57srbHMJ72q0h8iYXsIp" -O /ComfyUI/models/checkpoints/qwen_image_edit_2509_fp8.safetensors
-gdown "1VuO8pdiFwioAXw4m67OMiSR16RrAGHN_" -O /ComfyUI/models/checkpoints/qwen_image_fp8_e4m3fn.safetensors
+gdown "1UHHCpgtcZjt1Aj3ouznSuJjuLB6c34dt" -O /ComfyUI/models/diffusion_models/flux1-dev-fp8.safetensors
+gdown "1glgsmQB0gE2x57srbHMJ72q0h8iYXsIp" -O /ComfyUI/models/diffusion_models/qwen_image_edit_2509_fp8.safetensors
+gdown "1VuO8pdiFwioAXw4m67OMiSR16RrAGHN_" -O /ComfyUI/models/diffusion_models/qwen_image_fp8_e4m3fn.safetensors
 gdown "1CU8itTeWAvuWoEstDfPOLaW_drPZFaFx" -O /ComfyUI/models/text_encoders/clip_l.safetensors
 gdown "1Oe1OMK6gniuUrB3EGSzOoi60t4f-qpHs" -O /ComfyUI/models/text_encoders/t5xxl_fp8_e4m3fn.safetensors
 gdown "1dsRRnyG0svAm9Y7sLeXPZmbulUjTia_Y" -O /ComfyUI/models/text_encoders/qwen_2.5_vl_7b_fp8_scaled.safetensors
