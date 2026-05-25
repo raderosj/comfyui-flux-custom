@@ -1,14 +1,14 @@
 #!/bin/bash
 
-pip install gdown -q
-
 mkdir -p /ComfyUI/models/checkpoints
 mkdir -p /ComfyUI/models/text_encoders
 mkdir -p /ComfyUI/models/vae
 mkdir -p /ComfyUI/models/controlnet
 mkdir -p /ComfyUI/models/loras
 
-echo "📥 Скачиваем модели с Google Drive..."
+pip install gdown -q
+
+echo "📥 Скачиваем модели..."
 
 gdown "1UHHCpgtcZjt1Aj3ouznSuJjuLB6c34dt" -O /ComfyUI/models/checkpoints/flux1-dev-fp8.safetensors
 gdown "1glgsmQB0gE2x57srbHMJ72q0h8iYXsIp" -O /ComfyUI/models/checkpoints/qwen_image_edit_2509_fp8.safetensors
@@ -23,7 +23,8 @@ gdown "1j1S4_CbML6wYlvkC9TSwA3uRWmVqm-XY" -O /ComfyUI/models/loras/raderos_epoch
 gdown "1HDuxXcUqLxZKyI8Phil-edZQkmlDuFYq" -O /ComfyUI/models/loras/VanguardVision25_V1.1.safetensors
 gdown "1wBwRuqznJjFLXv4NSBIBmBKcIRwozag7" -O /ComfyUI/models/loras/fluxlisimo_cinematic_v2.safetensors
 
-echo "✅ Все модели скачаны!"
+echo "✅ Модели скачаны!"
 
-jupyter lab --ip=0.0.0.0 --port=8888 --no-browser --allow-root --NotebookApp.token="" --NotebookApp.password="" &
+jupyter lab --ip=0.0.0.0 --port=8888 --no-browser --allow-root --ServerApp.token="" --ServerApp.password="" &
+
 python3 /ComfyUI/main.py --listen 0.0.0.0 --port 8188
