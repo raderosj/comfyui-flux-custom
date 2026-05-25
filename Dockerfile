@@ -14,7 +14,7 @@ RUN pip3 install gguf opencv-python-headless
 
 RUN git clone https://github.com/comfyanonymous/ComfyUI /ComfyUI && \
     cd /ComfyUI && pip3 install -r requirements.txt && \
-    pip3 install sqlalchemy jupyterlab jupyter-server-terminals gdown
+    pip3 install sqlalchemy gdown
 
 RUN cd /ComfyUI/custom_nodes && \
     git clone https://github.com/Suzie1/ComfyUI_Comfyroll_CustomNodes && \
@@ -26,5 +26,5 @@ COPY start.sh /start.sh
 RUN chmod +x /start.sh
 
 WORKDIR /ComfyUI
-EXPOSE 8188 8888
+EXPOSE 8188
 CMD ["/start.sh"]
