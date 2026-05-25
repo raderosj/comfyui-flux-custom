@@ -10,9 +10,11 @@ RUN apt-get update && apt-get install -y \
 RUN pip3 install torch torchvision torchaudio \
     --index-url https://download.pytorch.org/whl/cu121
 
+RUN pip3 install gguf opencv-python-headless
+
 RUN git clone https://github.com/comfyanonymous/ComfyUI /ComfyUI && \
     cd /ComfyUI && pip3 install -r requirements.txt && \
-    pip3 install sqlalchemy jupyterlab
+    pip3 install sqlalchemy jupyterlab gdown
 
 RUN cd /ComfyUI/custom_nodes && \
     git clone https://github.com/Suzie1/ComfyUI_Comfyroll_CustomNodes && \
@@ -20,7 +22,8 @@ RUN cd /ComfyUI/custom_nodes && \
     git clone https://github.com/kijai/ComfyUI-KJNodes && \
     git clone https://github.com/Fannovel16/comfyui_controlnet_aux
 
-RUN echo '#!/bin/bash\njupyter lab --ip=0.0.0.0 --port=8888 --no-browser --allow-root --NotebookApp.token="" --NotebookApp.password="" &\npython3 /ComfyUI/main.py --listen 0.0.0.0 --port 8188' > /start.sh && chmod +x /start.sh
+COPY start.sh /start.sh
+RUN chmod +x /start.sh
 
 WORKDIR /ComfyUI
 EXPOSE 8188 8888
