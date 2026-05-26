@@ -6,6 +6,9 @@ mkdir -p /ComfyUI/models/vae
 mkdir -p /ComfyUI/models/controlnet
 mkdir -p /ComfyUI/models/loras
 
+# Логин с токеном
+huggingface-cli login --token ${HF_TOKEN}
+
 pip install -q huggingface_hub hf_transfer
 
 echo "📥 Скачиваем модели Flux..."
