@@ -6,28 +6,33 @@ mkdir -p /ComfyUI/models/vae
 mkdir -p /ComfyUI/models/controlnet
 mkdir -p /ComfyUI/models/loras
 
-# Логин с токеном
-huggingface-cli login --token ${HF_TOKEN}
+# Новая авторизация через hf
+hf auth login --token ${HF_TOKEN}
 
 pip install -q huggingface_hub hf_transfer
+
+# Добавляем явную переменную для Python
+export HF_TOKEN=${HF_TOKEN}
 
 echo "📥 Скачиваем модели Flux..."
 python3 -c "
 from huggingface_hub import snapshot_download
+import os
 snapshot_download(
     repo_id='raderos/comfyui-models-flux',
     local_dir='/ComfyUI/models',
-    token='${HF_TOKEN}'
+    token=os.environ['HF_TOKEN']
 )
 "
 
 echo "📥 Скачиваем модели Qwen..."
 python3 -c "
 from huggingface_hub import snapshot_download
+import os
 snapshot_download(
     repo_id='raderos/comfyui-models-qwen',
     local_dir='/ComfyUI/models',
-    token='${HF_TOKEN}'
+    token=os.environ['HF_TOKEN']
 )
 "
 
