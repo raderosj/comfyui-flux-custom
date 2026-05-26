@@ -12,6 +12,9 @@ RUN pip3 install torch torchvision torchaudio \
 
 RUN pip3 install gguf opencv-python-headless scikit-image
 
+# Устанавливаем новый HF CLI
+RUN pip install -U "huggingface-hub[cli]"
+
 RUN git clone https://github.com/comfyanonymous/ComfyUI /ComfyUI && \
     cd /ComfyUI && pip3 install -r requirements.txt && \
     pip3 install sqlalchemy gdown
