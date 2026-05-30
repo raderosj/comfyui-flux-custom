@@ -1,21 +1,11 @@
 #!/bin/bash
-
 mkdir -p /ComfyUI/models/diffusion_models
 mkdir -p /ComfyUI/models/text_encoders
 mkdir -p /ComfyUI/models/vae
 mkdir -p /ComfyUI/models/controlnet
 mkdir -p /ComfyUI/models/loras
-
 pip install -q huggingface_hub hf_transfer
-
 export HF_TOKEN=${HF_TOKEN}
-
-# ============================================
-# ТОЛЬКО ПЕРЕМЕННЫЕ — НЕ ТОРМОЗЯТ
-# ============================================
-export COMFYUI_FP8_FAST_MODE=1
-export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
-
 echo "📥 Скачиваем модели Flux..."
 python3 -c "
 from huggingface_hub import snapshot_download
@@ -26,7 +16,6 @@ snapshot_download(
     token=os.environ['HF_TOKEN']
 )
 "
-
 echo "📥 Скачиваем модели Qwen..."
 python3 -c "
 from huggingface_hub import snapshot_download
@@ -37,8 +26,5 @@ snapshot_download(
     token=os.environ['HF_TOKEN']
 )
 "
-
 echo "✅ Все модели скачаны!"
-
-# БЕЗ --lowvram — скорость не падает
 python3 /ComfyUI/main.py --listen 0.0.0.0 --port 8188
