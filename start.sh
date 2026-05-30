@@ -10,6 +10,12 @@ pip install -q huggingface_hub hf_transfer
 
 export HF_TOKEN=${HF_TOKEN}
 
+# ============================================
+# ТОЛЬКО ПЕРЕМЕННЫЕ — НЕ ТОРМОЗЯТ
+# ============================================
+export COMFYUI_FP8_FAST_MODE=1
+export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
+
 echo "📥 Скачиваем модели Flux..."
 python3 -c "
 from huggingface_hub import snapshot_download
@@ -34,4 +40,5 @@ snapshot_download(
 
 echo "✅ Все модели скачаны!"
 
+# БЕЗ --lowvram — скорость не падает
 python3 /ComfyUI/main.py --listen 0.0.0.0 --port 8188
