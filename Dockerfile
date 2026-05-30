@@ -23,7 +23,8 @@ RUN cd /ComfyUI/custom_nodes && \
     git clone https://github.com/Suzie1/ComfyUI_Comfyroll_CustomNodes && \
     git clone https://github.com/city96/ComfyUI-GGUF && \
     git clone https://github.com/kijai/ComfyUI-KJNodes && \
-    git clone https://github.com/Fannovel16/comfyui_controlnet_aux
+    git clone https://github.com/Fannovel16/comfyui_controlnet_aux && \
+    git clone https://github.com/jtydhr88/ComfyUI-qwenmultiangle.git
 
 COPY start.sh /start.sh
 RUN chmod +x /start.sh
