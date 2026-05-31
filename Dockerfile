@@ -12,10 +12,10 @@ RUN pip3 install torch torchvision torchaudio \
 
 RUN pip3 install gguf opencv-python-headless scikit-image
 
-# Устанавливаем HF CLI
+# Устанавливаем новый HF CLI
 RUN pip install -U "huggingface-hub[cli]"
 
-# ComfyUI 0.6.0
+# ИСПРАВЛЕНО: фиксация версии ComfyUI 0.6.0
 RUN git clone https://github.com/comfyanonymous/ComfyUI /ComfyUI && \
     cd /ComfyUI && \
     git fetch --tags && \
@@ -23,7 +23,6 @@ RUN git clone https://github.com/comfyanonymous/ComfyUI /ComfyUI && \
     pip3 install -r requirements.txt && \
     pip3 install sqlalchemy gdown
 
-# Кастомные ноды + Manager
 RUN cd /ComfyUI/custom_nodes && \
     git clone https://github.com/Suzie1/ComfyUI_Comfyroll_CustomNodes && \
     git clone https://github.com/city96/ComfyUI-GGUF && \
@@ -33,12 +32,9 @@ RUN cd /ComfyUI/custom_nodes && \
     git clone https://github.com/yolain/ComfyUI-Easy-Use.git && \
     git clone https://github.com/ltdrdata/ComfyUI-Manager.git
 
-# Устанавливаем gitpython (требуется Manager'у)
-RUN pip install gitpython
-
 # Обновляем все ноды до последних версий
 RUN cd /ComfyUI && \
-    python custom_nodes/ComfyUI-Manager/cm-cli.py update all --yes || true
+    python custom_nodes/ComfyUI-Manager/cm-cli.py update all || true
 
 COPY start.sh /start.sh
 RUN chmod +x /start.sh
