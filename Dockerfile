@@ -15,8 +15,12 @@ RUN pip3 install gguf opencv-python-headless scikit-image
 # Устанавливаем новый HF CLI
 RUN pip install -U "huggingface-hub[cli]"
 
+# ИСПРАВЛЕНО: фиксация версии ComfyUI 0.6.0
 RUN git clone https://github.com/comfyanonymous/ComfyUI /ComfyUI && \
-    cd /ComfyUI && pip3 install -r requirements.txt && \
+    cd /ComfyUI && \
+    git fetch --tags && \
+    git checkout tags/v0.6.0 && \
+    pip3 install -r requirements.txt && \
     pip3 install sqlalchemy gdown
 
 RUN cd /ComfyUI/custom_nodes && \
