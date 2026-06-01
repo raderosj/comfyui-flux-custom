@@ -34,4 +34,4 @@ snapshot_download(
 
 echo "✅ Все модели скачаны!"
 
-python3 /ComfyUI/main.py --listen 0.0.0.0 --port 8188
+python3 /ComfyUI/main.py --listen 0.0.0.0 --port 8188python3 /ComfyUI/main.py --listen 0.0.0.0 --port 8188
