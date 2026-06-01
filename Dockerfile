@@ -12,7 +12,6 @@ RUN pip3 install torch torchvision torchaudio \
 
 RUN pip3 install gguf opencv-python-headless scikit-image
 
-# Устанавливаем HF CLI
 RUN pip install -U "huggingface-hub[cli]"
 
 # ComfyUI 0.6.0
@@ -23,11 +22,10 @@ RUN git clone https://github.com/comfyanonymous/ComfyUI /ComfyUI && \
     pip3 install -r requirements.txt && \
     pip3 install sqlalchemy gdown
 
-# Кастомные ноды (без Manager, KJNodes — исправленный форк)
+# ТОЛЬКО работающие ноды (KJNodes удалён)
 RUN cd /ComfyUI/custom_nodes && \
     git clone https://github.com/Suzie1/ComfyUI_Comfyroll_CustomNodes && \
     git clone https://github.com/city96/ComfyUI-GGUF && \
-    git clone https://github.com/nicofdga/ComfyUI-KJNodes.git && \
     git clone https://github.com/Fannovel16/comfyui_controlnet_aux && \
     git clone https://github.com/jtydhr88/ComfyUI-qwenmultiangle.git && \
     git clone https://github.com/yolain/ComfyUI-Easy-Use.git
