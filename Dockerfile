@@ -20,22 +20,19 @@ RUN git clone https://github.com/comfyanonymous/ComfyUI /ComfyUI && \
     pip3 install -r requirements.txt && \
     pip3 install sqlalchemy gdown
 
-# Установка кастомных нодов
+# Кастомные ноды (ТОЛЬКО РАБОЧИЕ ССЫЛКИ)
 RUN cd /ComfyUI/custom_nodes && \
     git clone https://github.com/Suzie1/ComfyUI_Comfyroll_CustomNodes && \
     git clone https://github.com/city96/ComfyUI-GGUF && \
     git clone https://github.com/Fannovel16/comfyui_controlnet_aux && \
     git clone https://github.com/jtydhr88/ComfyUI-qwenmultiangle.git && \
-    git clone https://github.com/yolain/ComfyUI-Easy-Use.git && \
-    git clone https://github.com/Pixelailabs/paint_editor.git && \
-    git clone https://github.com/giriss/comfyui-image-saver.git && \
-    git clone https://github.com/ModelSurge/comfyui_mem_utils.git
+    git clone https://github.com/alexopus/ComfyUI-Image-Saver.git && \
+    cd ComfyUI-Image-Saver && pip install -r requirements.txt && cd .. && \
+    git clone https://github.com/LAOGOU-666/Comfyui-Memory_Cleanup.git
 
-# ПРИНУДИТЕЛЬНО УДАЛЯЕМ MANAGER, ЕСЛИ ОН ОТКУДА-ТО ПОЯВИЛСЯ
+# Удаляем Manager, если случайно появился
 RUN rm -rf /ComfyUI/custom_nodes/comfyui-manager
 RUN rm -rf /ComfyUI/custom_nodes/ComfyUI-Manager
-RUN rm -rf /ComfyUI/models/custom_nodes/comfyui-manager
-RUN find /ComfyUI -maxdepth 3 -type d -iname "*manager*" -exec rm -rf {} + 2>/dev/null || true
 
 COPY start.sh /start.sh
 RUN chmod +x /start.sh
