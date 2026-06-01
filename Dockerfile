@@ -14,15 +14,13 @@ RUN pip3 install gguf opencv-python-headless scikit-image
 
 RUN pip install -U "huggingface-hub[cli]"
 
-# ComfyUI v0.6.0 (стабильный, с поддержкой FP8 и ComfySwitchNode)
+# Скачиваем последнюю версию ComfyUI из основной ветки (master)
 RUN git clone https://github.com/comfyanonymous/ComfyUI /ComfyUI && \
     cd /ComfyUI && \
-    git fetch --tags && \
-    git checkout tags/v0.6.0 && \
     pip3 install -r requirements.txt && \
     pip3 install sqlalchemy gdown
 
-# Кастомные ноды — только для FLUX, Qwen и базовых утилит
+# Устанавливаем ТОЛЬКО нужные кастомные ноды (FLUX, Qwen, базовые утилиты)
 RUN cd /ComfyUI/custom_nodes && \
     git clone https://github.com/Suzie1/ComfyUI_Comfyroll_CustomNodes && \
     git clone https://github.com/city96/ComfyUI-GGUF && \
