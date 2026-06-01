@@ -14,19 +14,25 @@ RUN pip3 install gguf opencv-python-headless scikit-image
 
 RUN pip install -U "huggingface-hub[cli]"
 
-# Скачиваем последнюю версию ComfyUI из основной ветки (master)
+# Скачиваем ComfyUI
 RUN git clone https://github.com/comfyanonymous/ComfyUI /ComfyUI && \
     cd /ComfyUI && \
     pip3 install -r requirements.txt && \
     pip3 install sqlalchemy gdown
 
-# Устанавливаем ТОЛЬКО нужные кастомные ноды (FLUX, Qwen, базовые утилиты)
+# Установка кастомных нодов
 RUN cd /ComfyUI/custom_nodes && \
     git clone https://github.com/Suzie1/ComfyUI_Comfyroll_CustomNodes && \
     git clone https://github.com/city96/ComfyUI-GGUF && \
     git clone https://github.com/Fannovel16/comfyui_controlnet_aux && \
     git clone https://github.com/jtydhr88/ComfyUI-qwenmultiangle.git && \
     git clone https://github.com/yolain/ComfyUI-Easy-Use.git
+
+# ПРИНУДИТЕЛЬНО УДАЛЯЕМ MANAGER, ЕСЛИ ОН ОТКУДА-ТО ПОЯВИЛСЯ
+RUN rm -rf /ComfyUI/custom_nodes/comfyui-manager
+RUN rm -rf /ComfyUI/custom_nodes/ComfyUI-Manager
+RUN rm -rf /ComfyUI/models/custom_nodes/comfyui-manager
+RUN find /ComfyUI -maxdepth 3 -type d -iname "*manager*" -exec rm -rf {} + 2>/dev/null || true
 
 COPY start.sh /start.sh
 RUN chmod +x /start.sh
