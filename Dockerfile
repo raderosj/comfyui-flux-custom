@@ -27,6 +27,7 @@ RUN cd /ComfyUI/custom_nodes && \
     git clone https://github.com/Fannovel16/comfyui_controlnet_aux && \
     git clone https://github.com/jtydhr88/ComfyUI-qwenmultiangle.git && \
     git clone https://github.com/yolain/ComfyUI-Easy-Use.git
+    git clone https://github.com/Pixelailabs/paint_editor.git
 
 # ПРИНУДИТЕЛЬНО УДАЛЯЕМ MANAGER, ЕСЛИ ОН ОТКУДА-ТО ПОЯВИЛСЯ
 RUN rm -rf /ComfyUI/custom_nodes/comfyui-manager
