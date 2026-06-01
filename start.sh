@@ -34,4 +34,9 @@ snapshot_download(
 
 echo "✅ Все модели скачаны!"
 
-python3 /ComfyUI/main.py --listen 0.0.0.0 --port 8188python3 /ComfyUI/main.py --listen 0.0.0.0 --port 8188
+# Флаг --enable-manager включает ДИАГНОСТИКУ ошибок (понятные сообщения), НО НЕ УСТАНАВЛИВАЕТ менеджер.
+# После того как вы почините все воркфлоу, этот флаг можно убрать.
+python3 /ComfyUI/main.py \
+    --listen 0.0.0.0 \
+    --port 8188 \
+    --enable-manager
