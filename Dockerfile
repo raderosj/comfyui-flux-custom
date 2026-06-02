@@ -26,6 +26,7 @@ RUN cd /ComfyUI/custom_nodes && \
     git clone https://github.com/city96/ComfyUI-GGUF && \
     git clone https://github.com/Fannovel16/comfyui_controlnet_aux && \
     git clone https://github.com/jtydhr88/ComfyUI-qwenmultiangle.git && \
+    git clone https://github.com/yolain/ComfyUI-Easy-Use.git && \
     git clone https://github.com/alexopus/ComfyUI-Image-Saver.git && \
     cd ComfyUI-Image-Saver && pip install -r requirements.txt && cd .. && \
     git clone https://github.com/LAOGOU-666/Comfyui-Memory_Cleanup.git
