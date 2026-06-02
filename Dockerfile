@@ -28,7 +28,7 @@ RUN cd /ComfyUI/custom_nodes && \
     git clone https://github.com/jtydhr88/ComfyUI-qwenmultiangle.git && \
     git clone https://github.com/yolain/ComfyUI-Easy-Use.git && \
     git clone https://github.com/alexopus/ComfyUI-Image-Saver.git && \
-    cd ComfyUI-Image-Saver && pip install -r requirements.txt && cd .. && \
+    cd ComfyUI-Image-Saver && pip3 install -r requirements.txt && cd .. && \
     git clone https://github.com/ShmuelRonen/ComfyUI-FreeMemory.git && \
     git clone https://github.com/EricRollei/Eric_Qwen_Edit_Experiments.git && \
     git clone https://github.com/shootthesound/comfyui-ReferenceLatentPlus.git && \
@@ -38,11 +38,11 @@ RUN cd /ComfyUI/custom_nodes && \
 # Обновляем ComfyUI-Impact-Pack до последней версии и устанавливаем зависимости
 RUN cd /ComfyUI/custom_nodes/ComfyUI-Impact-Pack && \
     git pull && \
-    python install.py && \
-    pip install -r requirements.txt --upgrade
+    python3 install.py && \
+    pip3 install -r requirements.txt --upgrade
 
 # Устанавливаем зависимости для ReferenceLatentPlus
-RUN pip install mediapipe
+RUN pip3 install mediapipe
 
 # Удаляем Manager, если случайно появился
 RUN rm -rf /ComfyUI/custom_nodes/comfyui-manager
