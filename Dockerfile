@@ -12,7 +12,7 @@ RUN pip3 install torch torchvision torchaudio \
 
 RUN pip3 install gguf opencv-python-headless scikit-image
 
-RUN pip install -U "huggingface-hub[cli]"
+RUN pip3 install -U "huggingface-hub[cli]"
 
 # Скачиваем ComfyUI
 RUN git clone https://github.com/comfyanonymous/ComfyUI /ComfyUI && \
@@ -20,7 +20,10 @@ RUN git clone https://github.com/comfyanonymous/ComfyUI /ComfyUI && \
     pip3 install -r requirements.txt && \
     pip3 install sqlalchemy gdown
 
-# Кастомные ноды (все ссылки проверены и рабочие)
+# Обновляем совместимость
+RUN pip3 install --upgrade diffusers huggingface-hub
+
+# Кастомные ноды
 RUN cd /ComfyUI/custom_nodes && \
     git clone https://github.com/Suzie1/ComfyUI_Comfyroll_CustomNodes && \
     git clone https://github.com/city96/ComfyUI-GGUF && \
@@ -35,16 +38,13 @@ RUN cd /ComfyUI/custom_nodes && \
     git clone https://github.com/rgthree/rgthree-comfy.git && \
     git clone https://github.com/rgthree/ComfyUI-Impact-Pack.git
 
-# Обновляем ComfyUI-Impact-Pack до последней версии и устанавливаем зависимости
+# Обновляем ComfyUI-Impact-Pack (без install.py, только git pull + pip)
 RUN cd /ComfyUI/custom_nodes/ComfyUI-Impact-Pack && \
     git pull && \
-    python3 install.py && \
     pip3 install -r requirements.txt --upgrade
 
-# Устанавливаем зависимости для ReferenceLatentPlus
 RUN pip3 install mediapipe
 
-# Удаляем Manager, если случайно появился
 RUN rm -rf /ComfyUI/custom_nodes/comfyui-manager
 RUN rm -rf /ComfyUI/custom_nodes/ComfyUI-Manager
 
