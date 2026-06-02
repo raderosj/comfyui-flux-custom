@@ -35,6 +35,12 @@ RUN cd /ComfyUI/custom_nodes && \
     git clone https://github.com/rgthree/rgthree-comfy.git && \
     git clone https://github.com/rgthree/ComfyUI-Impact-Pack.git
 
+# Обновляем ComfyUI-Impact-Pack до последней версии и устанавливаем зависимости
+RUN cd /ComfyUI/custom_nodes/ComfyUI-Impact-Pack && \
+    git pull && \
+    python install.py && \
+    pip install -r requirements.txt --upgrade
+
 # Устанавливаем зависимости для ReferenceLatentPlus
 RUN pip install mediapipe
 
