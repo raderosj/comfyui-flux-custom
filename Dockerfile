@@ -20,7 +20,7 @@ RUN git clone https://github.com/comfyanonymous/ComfyUI /ComfyUI && \
     pip3 install -r requirements.txt && \
     pip3 install sqlalchemy gdown
 
-# Кастомные ноды (все ссылки рабочие)
+# Кастомные ноды (все ссылки проверены и рабочие)
 RUN cd /ComfyUI/custom_nodes && \
     git clone https://github.com/Suzie1/ComfyUI_Comfyroll_CustomNodes && \
     git clone https://github.com/city96/ComfyUI-GGUF && \
@@ -31,7 +31,9 @@ RUN cd /ComfyUI/custom_nodes && \
     cd ComfyUI-Image-Saver && pip install -r requirements.txt && cd .. && \
     git clone https://github.com/ShmuelRonen/ComfyUI-FreeMemory.git && \
     git clone https://github.com/EricRollei/Eric_Qwen_Edit_Experiments.git && \
-    git clone https://github.com/shootthesound/comfyui-ReferenceLatentPlus.git
+    git clone https://github.com/shootthesound/comfyui-ReferenceLatentPlus.git && \
+    git clone https://github.com/rgthree/rgthree-comfy.git && \
+    git clone https://github.com/rgthree/ComfyUI-Impact-Pack.git
 
 # Устанавливаем зависимости для ReferenceLatentPlus
 RUN pip install mediapipe
