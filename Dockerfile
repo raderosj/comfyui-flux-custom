@@ -19,6 +19,7 @@ RUN git clone https://github.com/comfyanonymous/ComfyUI /ComfyUI && \
     pip3 install -r requirements.txt && \
     pip3 install sqlalchemy gdown
 
+# Кастомные ноды (masquerade-nodes-comfyui удален)
 RUN cd /ComfyUI/custom_nodes && \
     git clone https://github.com/city96/ComfyUI-GGUF && \
     git clone https://github.com/Fannovel16/comfyui_controlnet_aux && \
@@ -36,9 +37,7 @@ RUN cd /ComfyUI/custom_nodes && \
     git clone https://github.com/WASasquatch/was-node-suite-comfyui.git && \
     cd was-node-suite-comfyui && pip3 install -r requirements.txt && cd .. && \
     git clone https://github.com/kijai/ComfyUI-KJNodes.git && \
-    cd ComfyUI-KJNodes && pip3 install -r requirements.txt && cd .. && \
-    git clone https://github.com/BadCafeCode/masquerade-nodes-comfyui.git && \
-    cd masquerade-nodes-comfyui && pip3 install -r requirements.txt
+    cd ComfyUI-KJNodes && pip3 install -r requirements.txt
 
 RUN pip3 install mediapipe
 
