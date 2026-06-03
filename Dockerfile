@@ -33,9 +33,18 @@ RUN cd /ComfyUI/custom_nodes && \
     git clone https://github.com/ltdrdata/ComfyUI-Impact-Pack.git && \
     cd ComfyUI-Impact-Pack && python3 install.py && \
     pip3 install -r requirements.txt && \
-    rm -f web/extensions/core/comboBoolMigration.js && cd ..
+    rm -f web/extensions/core/comboBoolMigration.js && cd .. && \
+    git clone https://github.com/WASasquatch/was-node-suite-comfyui.git && \
+    cd was-node-suite-comfyui && pip3 install -r requirements.txt && cd .. && \
+    git clone https://github.com/BadCafeCode/masquerade-nodes-comfyui.git && \
+    cd masquerade-nodes-comfyui && pip3 install -r requirements.txt && cd .. && \
+    git clone https://github.com/kijai/ComfyUI-KJNodes.git && \
+    cd ComfyUI-KJNodes && pip3 install -r requirements.txt
 
 RUN pip3 install mediapipe
+
+# Дополнительная зависимость для ComfyUI-FreeMemory
+RUN pip3 install psutil
 
 COPY start.sh /start.sh
 RUN chmod +x /start.sh
