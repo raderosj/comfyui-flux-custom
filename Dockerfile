@@ -27,7 +27,6 @@ RUN cd /ComfyUI/custom_nodes && \
     cd ComfyUI-Easy-Use && pip3 install -r requirements.txt && cd .. && \
     git clone https://github.com/alexopus/ComfyUI-Image-Saver.git && \
     cd ComfyUI-Image-Saver && pip3 install -r requirements.txt && cd .. && \
-    git clone https://github.com/ShmuelRonen/ComfyUI-FreeMemory.git && \
     git clone https://github.com/EricRollei/Eric_Qwen_Edit_Experiments.git && \
     git clone https://github.com/rgthree/rgthree-comfy.git && \
     git clone https://github.com/ltdrdata/ComfyUI-Impact-Pack.git && \
@@ -37,7 +36,9 @@ RUN cd /ComfyUI/custom_nodes && \
     git clone https://github.com/WASasquatch/was-node-suite-comfyui.git && \
     cd was-node-suite-comfyui && pip3 install -r requirements.txt && cd .. && \
     git clone https://github.com/kijai/ComfyUI-KJNodes.git && \
-    cd ComfyUI-KJNodes && pip3 install -r requirements.txt
+    cd ComfyUI-KJNodes && pip3 install -r requirements.txt && cd .. && \
+    git clone https://github.com/BadCafeCode/masquerade-nodes-comfyui.git && \
+    cd masquerade-nodes-comfyui && pip3 install -r requirements.txt
 
 RUN pip3 install mediapipe
 
