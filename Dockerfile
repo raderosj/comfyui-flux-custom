@@ -23,6 +23,12 @@ RUN git clone https://github.com/comfyanonymous/ComfyUI /ComfyUI && \
 # Обновляем совместимость
 RUN pip3 install --upgrade diffusers huggingface-hub
 
+# Принудительное обновление пакетов фронтенда до указанных версий
+RUN pip3 install --upgrade \
+    comfyui-frontend-package==1.37.11 \
+    comfyui-workflow-templates==0.8.27 \
+    comfyui-embedded-docs==0.4.0
+
 # Кастомные ноды
 RUN cd /ComfyUI/custom_nodes && \
     git clone https://github.com/Suzie1/ComfyUI_Comfyroll_CustomNodes && \
@@ -38,9 +44,12 @@ RUN cd /ComfyUI/custom_nodes && \
     git clone https://github.com/rgthree/rgthree-comfy.git && \
     git clone https://github.com/rgthree/ComfyUI-Impact-Pack.git
 
-# Обновляем ComfyUI-Impact-Pack (без install.py, только git pull + pip)
-RUN cd /ComfyUI/custom_nodes/ComfyUI-Impact-Pack && \
-    git pull && \
+# Принудительное удаление и переустановка ComfyUI-Impact-Pack для совместимости с новым фронтендом
+RUN rm -rf /ComfyUI/custom_nodes/ComfyUI-Impact-Pack
+RUN cd /ComfyUI/custom_nodes && \
+    git clone https://github.com/rgthree/ComfyUI-Impact-Pack.git && \
+    cd ComfyUI-Impact-Pack && \
+    python3 install.py && \
     pip3 install -r requirements.txt --upgrade
 
 RUN pip3 install mediapipe
