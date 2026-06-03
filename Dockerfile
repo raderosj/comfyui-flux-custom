@@ -14,22 +14,23 @@ RUN pip3 install gguf opencv-python-headless scikit-image
 
 RUN pip3 install -U "huggingface-hub[cli]"
 
-# Скачиваем ComfyUI
+# Скачиваем и обновляем ComfyUI до последней версии (главное изменение!)
 RUN git clone https://github.com/comfyanonymous/ComfyUI /ComfyUI && \
     cd /ComfyUI && \
+    git pull && \
     pip3 install -r requirements.txt && \
     pip3 install sqlalchemy gdown
 
 # Обновляем совместимость
 RUN pip3 install --upgrade diffusers huggingface-hub
 
-# Принудительное обновление пакетов фронтенда до указанных версий
+# Обновляем все компоненты фронтенда до нужных версий (убираем понижение)
 RUN pip3 install --upgrade \
-    comfyui-frontend-package==1.37.11 \
-    comfyui-workflow-templates==0.8.27 \
-    comfyui-embedded-docs==0.4.0
+    comfyui-frontend-package \
+    comfyui-workflow-templates \
+    comfyui-embedded-docs
 
-# Кастомные ноды
+# Кастомные ноды (уже правильно установлены)
 RUN cd /ComfyUI/custom_nodes && \
     git clone https://github.com/Suzie1/ComfyUI_Comfyroll_CustomNodes && \
     git clone https://github.com/city96/ComfyUI-GGUF && \
@@ -44,7 +45,7 @@ RUN cd /ComfyUI/custom_nodes && \
     git clone https://github.com/rgthree/rgthree-comfy.git && \
     git clone https://github.com/rgthree/ComfyUI-Impact-Pack.git
 
-# Принудительное удаление и переустановка ComfyUI-Impact-Pack для совместимости с новым фронтендом
+# Принудительная переустановка ComfyUI-Impact-Pack для совместимости
 RUN rm -rf /ComfyUI/custom_nodes/ComfyUI-Impact-Pack
 RUN cd /ComfyUI/custom_nodes && \
     git clone https://github.com/rgthree/ComfyUI-Impact-Pack.git && \
