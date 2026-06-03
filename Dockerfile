@@ -1,4 +1,4 @@
-FROM nvidia/cuda:12.1.0-cudnn8-runtime-ubuntu22.04
+FROM nvidia/cuda:12.4.1-cudnn-runtime-ubuntu22.04
 
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -12,7 +12,7 @@ RUN pip3 install torch torchvision torchaudio \
 
 RUN pip3 install gguf opencv-python-headless
 
-RUN pip3 install -U "huggingface-hub[cli]"
+RUN pip3 install -U "huggingface-hub[cli]" hf_transfer huggingface_hub
 
 RUN git clone https://github.com/comfyanonymous/ComfyUI /ComfyUI && \
     cd /ComfyUI && \
