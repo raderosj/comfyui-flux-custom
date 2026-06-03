@@ -1,40 +1,45 @@
-#!/bin/bash
+FROM nvidia/cuda:12.4.1-cudnn-runtime-ubuntu22.04
 
-mkdir -p /ComfyUI/models/diffusion_models
-mkdir -p /ComfyUI/models/text_encoders
-mkdir -p /ComfyUI/models/vae
-mkdir -p /ComfyUI/models/controlnet
-mkdir -p /ComfyUI/models/loras
+ENV DEBIAN_FRONTEND=noninteractive
 
-export HF_TOKEN=${HF_TOKEN}
+RUN apt-get update && apt-get install -y \
+    git wget python3 python3-pip \
+    libgl1 libglib2.0-0 \
+    && rm -rf /var/lib/apt/lists/*
 
-echo "📥 Скачиваем модели Flux..."
-python3 -c "
-from huggingface_hub import snapshot_download
-import os
-snapshot_download(
-    repo_id='raderos/comfyui-models-flux',
-    local_dir='/ComfyUI/models',
-    token=os.environ['HF_TOKEN']
-)
-"
+RUN pip3 install torch torchvision torchaudio \
+    --index-url https://download.pytorch.org/whl/cu121
 
-echo "📥 Скачиваем модели Qwen..."
-python3 -c "
-from huggingface_hub import snapshot_download
-import os
-snapshot_download(
-    repo_id='raderos/comfyui-models-qwen',
-    local_dir='/ComfyUI/models',
-    token=os.environ['HF_TOKEN']
-)
-"
+RUN pip3 install gguf opencv-python-headless
 
-echo "✅ Все модели скачаны!"
+RUN pip3 install -U "huggingface-hub[cli]" hf_transfer huggingface_hub
 
-# Флаг --enable-manager включает ДИАГНОСТИКУ ошибок (понятные сообщения), НО НЕ УСТАНАВЛИВАЕТ менеджер.
-# После того как вы почините все воркфлоу, этот флаг можно убрать.
-python3 /ComfyUI/main.py \
-    --listen 0.0.0.0 \
-    --port 8188 \
-    --enable-manager
+RUN git clone https://github.com/comfyanonymous/ComfyUI /ComfyUI && \
+    cd /ComfyUI && \
+    pip3 install -r requirements.txt && \
+    pip3 install sqlalchemy gdown
+
+RUN cd /ComfyUI/custom_nodes && \
+    git clone https://github.com/city96/ComfyUI-GGUF && \
+    git clone https://github.com/Fannovel16/comfyui_controlnet_aux && \
+    git clone https://github.com/jtydhr88/ComfyUI-qwenmultiangle.git && \
+    git clone https://github.com/yolain/ComfyUI-Easy-Use.git && \
+    cd ComfyUI-Easy-Use && pip3 install -r requirements.txt && cd .. && \
+    git clone https://github.com/alexopus/ComfyUI-Image-Saver.git && \
+    cd ComfyUI-Image-Saver && pip3 install -r requirements.txt && cd .. && \
+    git clone https://github.com/ShmuelRonen/ComfyUI-FreeMemory.git && \
+    git clone https://github.com/EricRollei/Eric_Qwen_Edit_Experiments.git && \
+    git clone https://github.com/rgthree/rgthree-comfy.git && \
+    git clone https://github.com/ltdrdata/ComfyUI-Impact-Pack.git && \
+    cd ComfyUI-Impact-Pack && python3 install.py && \
+    pip3 install -r requirements.txt && \
+    rm -f web/extensions/core/comboBoolMigration.js && cd ..
+
+RUN pip3 install mediapipe
+
+COPY start.sh /start.sh
+RUN chmod +x /start.sh
+
+WORKDIR /ComfyUI
+EXPOSE 8188
+CMD ["/start.sh"]
