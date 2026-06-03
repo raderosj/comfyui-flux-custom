@@ -14,7 +14,7 @@ RUN pip3 install gguf opencv-python-headless scikit-image
 
 RUN pip3 install -U "huggingface-hub[cli]"
 
-# Скачиваем и обновляем ComfyUI до последней версии (главное изменение!)
+# Скачиваем и обновляем ComfyUI до последней версии
 RUN git clone https://github.com/comfyanonymous/ComfyUI /ComfyUI && \
     cd /ComfyUI && \
     git pull && \
@@ -24,13 +24,13 @@ RUN git clone https://github.com/comfyanonymous/ComfyUI /ComfyUI && \
 # Обновляем совместимость
 RUN pip3 install --upgrade diffusers huggingface-hub
 
-# Обновляем все компоненты фронтенда до нужных версий (убираем понижение)
+# Обновляем фронтенд
 RUN pip3 install --upgrade \
     comfyui-frontend-package \
     comfyui-workflow-templates \
     comfyui-embedded-docs
 
-# Кастомные ноды (уже правильно установлены)
+# Все кастомные ноды, кроме Impact Pack
 RUN cd /ComfyUI/custom_nodes && \
     git clone https://github.com/Suzie1/ComfyUI_Comfyroll_CustomNodes && \
     git clone https://github.com/city96/ComfyUI-GGUF && \
@@ -42,12 +42,11 @@ RUN cd /ComfyUI/custom_nodes && \
     git clone https://github.com/ShmuelRonen/ComfyUI-FreeMemory.git && \
     git clone https://github.com/EricRollei/Eric_Qwen_Edit_Experiments.git && \
     git clone https://github.com/shootthesound/comfyui-ReferenceLatentPlus.git && \
-    git clone https://github.com/rgthree/rgthree-comfy.git && \
-    git clone https://github.com/rgthree/ComfyUI-Impact-Pack.git
+    git clone https://github.com/rgthree/rgthree-comfy.git
 
-# Принудительная переустановка ComfyUI-Impact-Pack для совместимости
-RUN rm -rf /ComfyUI/custom_nodes/ComfyUI-Impact-Pack
-RUN cd /ComfyUI/custom_nodes && \
+# УСТАНОВКА IMPACT PACK (чистая, без git pull)
+RUN rm -rf /ComfyUI/custom_nodes/ComfyUI-Impact-Pack && \
+    cd /ComfyUI/custom_nodes && \
     git clone https://github.com/rgthree/ComfyUI-Impact-Pack.git && \
     cd ComfyUI-Impact-Pack && \
     python3 install.py && \
