@@ -20,3 +20,4 @@ jobs:
           context: .
           push: true
           tags: raderosj/comfyui-flux-custom:latest
+          no-cache: true
