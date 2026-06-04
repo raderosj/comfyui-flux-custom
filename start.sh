@@ -6,7 +6,8 @@ mkdir -p /ComfyUI/models/vae
 mkdir -p /ComfyUI/models/controlnet
 mkdir -p /ComfyUI/models/loras
 
-export HF_HUB_ENABLE_HF_TRANSFER=1
+# Убираем устаревшую переменную, заменяем на новую для ускорения (Xet)
+export HF_XET_HIGH_PERFORMANCE=1
 
 echo "📥 Скачиваем модели Flux..."
 python3 -c "
