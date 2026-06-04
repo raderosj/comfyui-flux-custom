@@ -12,14 +12,15 @@ RUN pip3 install torch torchvision torchaudio \
 
 RUN pip3 install gguf opencv-python-headless
 
-RUN pip3 install -U "huggingface-hub[cli]" hf_transfer huggingface_hub
+# Устанавливаем huggingface_hub без устаревшего hf_transfer
+RUN pip3 install -U "huggingface-hub[cli]" huggingface_hub
 
 RUN git clone https://github.com/comfyanonymous/ComfyUI /ComfyUI && \
     cd /ComfyUI && \
     pip3 install -r requirements.txt && \
     pip3 install sqlalchemy gdown
 
-# Исправленная команда RUN (удалены артефакты @@ -17,3 +38,14 @@)
+# Кастомные ноды (masquerade-nodes-comfyui удалён — он не нужен)
 RUN cd /ComfyUI/custom_nodes && \
     git clone https://github.com/city96/ComfyUI-GGUF && \
     git clone https://github.com/Fannovel16/comfyui_controlnet_aux && \
