@@ -35,4 +35,5 @@ snapshot_download(
 
 echo "✅ Все модели скачаны!"
 
-python3 /ComfyUI/main.py --listen 0.0.0.0 --port 8188
+# Запуск с флагом --lowvram для 16GB GPU
+python3 /ComfyUI/main.py --listen 0.0.0.0 --port 8188 --lowvram
