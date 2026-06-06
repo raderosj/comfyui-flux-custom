@@ -35,5 +35,5 @@ snapshot_download(
 
 echo "✅ Все модели скачаны!"
 
-# Запуск с флагом --lowvram для 16GB GPU
-python3 /ComfyUI/main.py --listen 0.0.0.0 --port 8188 --lowvram
+# Запуск с флагами для экономии VRAM на 24GB GPU
+python3 /ComfyUI/main.py --listen 0.0.0.0 --port 8188 --lowvram --disable-smart-memory
