@@ -22,7 +22,7 @@ RUN git clone https://github.com/comfyanonymous/ComfyUI /ComfyUI && \
     pip3 install -r requirements.txt && \
     pip3 install sqlalchemy gdown
 
-# Кастомные ноды (Eric_Qwen_Edit_Experiments удалён)
+# Кастомные ноды (Eric_Qwen_Edit_Experiments удалён, WAS Node Suite удалён)
 RUN cd /ComfyUI/custom_nodes && \
     git clone https://github.com/city96/ComfyUI-GGUF && \
     git clone https://github.com/Fannovel16/comfyui_controlnet_aux && \
@@ -36,8 +36,6 @@ RUN cd /ComfyUI/custom_nodes && \
     cd ComfyUI-Impact-Pack && python3 install.py && \
     pip3 install -r requirements.txt && \
     rm -f web/extensions/core/comboBoolMigration.js && cd .. && \
-    git clone https://github.com/WASasquatch/was-node-suite-comfyui.git && \
-    cd was-node-suite-comfyui && pip3 install -r requirements.txt && cd .. && \
     git clone https://github.com/kijai/ComfyUI-KJNodes.git && \
     cd ComfyUI-KJNodes && pip3 install -r requirements.txt
 
