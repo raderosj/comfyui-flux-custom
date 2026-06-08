@@ -15,10 +15,7 @@ RUN pip3 install torch==2.6.0 torchvision==0.21.0 torchaudio==2.6.0 \
 RUN pip3 install "transformers==4.47.0"
 
 RUN pip3 install gguf opencv-python-headless
-
-# ОТКАТ huggingface_hub до стабильной версии (без утечек памяти при скачивании)
-RUN pip3 uninstall -y huggingface_hub huggingface-hub 2>/dev/null || true && \
-    pip3 install huggingface_hub==0.13.4
+RUN pip3 install -U "huggingface-hub[cli]" huggingface_hub
 
 RUN git clone https://github.com/comfyanonymous/ComfyUI /ComfyUI && \
     cd /ComfyUI && \
@@ -43,7 +40,6 @@ RUN cd /ComfyUI/custom_nodes && \
     cd ComfyUI-KJNodes && pip3 install -r requirements.txt
 
 RUN pip3 install mediapipe psutil
-
 COPY start.sh /start.sh
 RUN chmod +x /start.sh
 
