@@ -7,13 +7,12 @@ RUN apt-get update && apt-get install -y \
     libgl1 libglib2.0-0 \
     && rm -rf /var/lib/apt/lists/*
 
-# Ключевое исправление: PyTorch 2.8+ с CUDA 12.4 (нужен для Eric_Qwen_Edit_Experiments)
-RUN pip3 install torch==2.8.0 torchvision==0.23.0 torchaudio==2.8.0 \
+# Ключевое исправление: PyTorch 2.6+ с CUDA 12.4
+RUN pip3 install torch==2.6.0 torchvision==0.21.0 torchaudio==2.6.0 \
     --index-url https://download.pytorch.org/whl/cu124
 
-# Устанавливаем зависимости для Eric_Qwen_Edit_Experiments
-RUN pip3 install "transformers>=4.54.0" "accelerate>=1.5.0" && \
-    pip3 cache purge
+# Фиксируем transformers на совместимой версии (без torch.float8_e8m0fnu)
+RUN pip3 install "transformers==4.47.0"
 
 RUN pip3 install gguf opencv-python-headless
 RUN pip3 install -U "huggingface-hub[cli]" huggingface_hub
@@ -23,7 +22,7 @@ RUN git clone https://github.com/comfyanonymous/ComfyUI /ComfyUI && \
     pip3 install -r requirements.txt && \
     pip3 install sqlalchemy gdown
 
-# Кастомные ноды
+# Кастомные ноды (Eric_Qwen_Edit_Experiments удалён, WAS Node Suite удалён)
 RUN cd /ComfyUI/custom_nodes && \
     git clone https://github.com/city96/ComfyUI-GGUF && \
     git clone https://github.com/Fannovel16/comfyui_controlnet_aux && \
@@ -39,7 +38,7 @@ RUN cd /ComfyUI/custom_nodes && \
     rm -f web/extensions/core/comboBoolMigration.js && cd .. && \
     git clone https://github.com/kijai/ComfyUI-KJNodes.git && \
     cd ComfyUI-KJNodes && pip3 install -r requirements.txt && cd .. && \
-    git clone https://github.com/EricRollei/Eric_Qwen_Edit_Experiments.git
+    git clone https://github.com/ltdrdata/ComfyUI-Impact-Subpack.git
 
 RUN pip3 install mediapipe psutil
 
