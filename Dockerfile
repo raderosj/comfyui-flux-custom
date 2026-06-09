@@ -17,6 +17,9 @@ RUN pip3 install "transformers==4.47.0"
 RUN pip3 install gguf opencv-python-headless
 RUN pip3 install -U "huggingface-hub[cli]" huggingface_hub
 
+# Устанавливаем ultralytics для детектора лиц Impact-Subpack
+RUN pip3 install ultralytics
+
 RUN git clone https://github.com/comfyanonymous/ComfyUI /ComfyUI && \
     cd /ComfyUI && \
     pip3 install -r requirements.txt && \
