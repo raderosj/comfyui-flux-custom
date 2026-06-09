@@ -7,8 +7,8 @@ RUN apt-get update && apt-get install -y \
     libgl1 libglib2.0-0 \
     && rm -rf /var/lib/apt/lists/*
 
-# Ключевое исправление: PyTorch 2.6+ с CUDA 12.4
-RUN pip3 install torch==2.6.0 torchvision==0.21.0 torchaudio==2.6.0 \
+# Ключевое исправление: PyTorch 2.8+ с CUDA 12.4 (нужен для Eric_Qwen_Edit_Experiments)
+RUN pip3 install torch==2.8.0 torchvision==0.23.0 torchaudio==2.8.0 \
     --index-url https://download.pytorch.org/whl/cu124
 
 # Устанавливаем зависимости для Eric_Qwen_Edit_Experiments
