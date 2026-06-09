@@ -11,7 +11,7 @@ RUN apt-get update && apt-get install -y \
 RUN pip3 install torch==2.6.0 torchvision==0.21.0 torchaudio==2.6.0 \
     --index-url https://download.pytorch.org/whl/cu124
 
-# Фиксируем transformers на совместимой версии (без torch.float8_e8m0fnu)
+# Фиксируем transformers на совместимой версии
 RUN pip3 install "transformers==4.47.0"
 
 RUN pip3 install gguf opencv-python-headless
@@ -22,7 +22,7 @@ RUN git clone https://github.com/comfyanonymous/ComfyUI /ComfyUI && \
     pip3 install -r requirements.txt && \
     pip3 install sqlalchemy gdown
 
-# Кастомные ноды (Eric_Qwen_Edit_Experiments удалён, WAS Node Suite удалён)
+# Кастомные ноды
 RUN cd /ComfyUI/custom_nodes && \
     git clone https://github.com/city96/ComfyUI-GGUF && \
     git clone https://github.com/Fannovel16/comfyui_controlnet_aux && \
@@ -37,9 +37,11 @@ RUN cd /ComfyUI/custom_nodes && \
     pip3 install -r requirements.txt && \
     rm -f web/extensions/core/comboBoolMigration.js && cd .. && \
     git clone https://github.com/kijai/ComfyUI-KJNodes.git && \
-    cd ComfyUI-KJNodes && pip3 install -r requirements.txt
+    cd ComfyUI-KJNodes && pip3 install -r requirements.txt && cd .. && \
+    git clone https://github.com/EricRollei/Eric_Qwen_Edit_Experiments.git
 
 RUN pip3 install mediapipe psutil
+
 COPY start.sh /start.sh
 RUN chmod +x /start.sh
 
