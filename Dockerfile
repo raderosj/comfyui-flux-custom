@@ -20,7 +20,7 @@ RUN git clone https://github.com/comfyanonymous/ComfyUI /ComfyUI && \
     pip3 install -r requirements.txt && \
     pip3 install sqlalchemy gdown
 
-# Кастомные ноды (только нужное + ControlNet)
+# Кастомные ноды (только нужное + ControlNet + VAE Tiling)
 RUN cd /ComfyUI/custom_nodes && \
     git clone https://github.com/city96/ComfyUI-GGUF && \
     git clone https://github.com/jtydhr88/ComfyUI-qwenmultiangle.git && \
@@ -29,7 +29,9 @@ RUN cd /ComfyUI/custom_nodes && \
     git clone https://github.com/alexopus/ComfyUI-Image-Saver.git && \
     cd ComfyUI-Image-Saver && pip3 install -r requirements.txt && cd .. && \
     git clone https://github.com/Fannovel16/comfyui_controlnet_aux.git && \
-    cd comfyui_controlnet_aux && pip3 install -r requirements.txt
+    cd comfyui_controlnet_aux && pip3 install -r requirements.txt && cd .. && \
+    git clone https://github.com/spacepxl/ComfyUI-Qwen-VAE-Tiling.git && \
+    cd ComfyUI-Qwen-VAE-Tiling && pip3 install -r requirements.txt
 
 RUN pip3 install mediapipe psutil
 
