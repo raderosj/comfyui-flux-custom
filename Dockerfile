@@ -11,8 +11,9 @@ RUN apt-get update && apt-get install -y \
 RUN pip3 install torch==2.6.0 torchvision==0.21.0 torchaudio==2.6.0 \
     --index-url https://download.pytorch.org/whl/cu124
 
-# Фиксируем transformers на совместимой версии
-RUN pip3 install "transformers==4.47.0"
+# Устанавливаем зависимости для Eric_Qwen_Edit_Experiments
+RUN pip3 install "transformers>=4.54.0" "accelerate>=1.5.0" && \
+    pip3 cache purge
 
 RUN pip3 install gguf opencv-python-headless
 RUN pip3 install -U "huggingface-hub[cli]" huggingface_hub
