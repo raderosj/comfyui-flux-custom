@@ -20,9 +20,8 @@ RUN git clone https://github.com/comfyanonymous/ComfyUI /ComfyUI && \
     pip3 install -r requirements.txt && \
     pip3 install sqlalchemy gdown
 
-# Кастомные ноды (все необходимые)
+# Кастомные ноды (без VAE Tiling)
 RUN cd /ComfyUI/custom_nodes && \
-    # Основные (были)
     git clone https://github.com/city96/ComfyUI-GGUF && \
     git clone https://github.com/jtydhr88/ComfyUI-qwenmultiangle.git && \
     git clone https://github.com/yolain/ComfyUI-Easy-Use.git && \
@@ -30,14 +29,7 @@ RUN cd /ComfyUI/custom_nodes && \
     git clone https://github.com/alexopus/ComfyUI-Image-Saver.git && \
     cd ComfyUI-Image-Saver && pip3 install -r requirements.txt && cd .. && \
     git clone https://github.com/Fannovel16/comfyui_controlnet_aux.git && \
-    cd comfyui_controlnet_aux && pip3 install -r requirements.txt && cd .. && \
-    # Новые для воркфлоу kontext_hires
-    git clone https://github.com/TTPlanetPig/Comfyui_TTP_Toolset.git && \
-    git clone https://github.com/chflame163/ComfyUI_LayerStyle.git && \
-    git clone https://github.com/cubiq/ComfyUI_essentials.git && \
-    git clone https://github.com/rgthree/rgthree-comfy.git && \
-    # Ускоритель TeaCache для Flux
-    git clone https://github.com/welltop-cn/ComfyUI-TeaCache.git
+    cd comfyui_controlnet_aux && pip3 install -r requirements.txt
 
 RUN pip3 install mediapipe psutil
 
