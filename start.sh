@@ -6,8 +6,11 @@ mkdir -p /ComfyUI/models/vae
 mkdir -p /ComfyUI/models/controlnet
 mkdir -p /ComfyUI/models/loras
 
-# Убираем устаревшую переменную, заменяем на новую для ускорения (Xet)
-export HF_XET_HIGH_PERFORMANCE=1
+# Ключевая переменная для PyTorch (решает проблему фрагментации памяти)
+export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
+
+# Передаём HF_TOKEN (без лишних переменных)
+export HF_TOKEN=${HF_TOKEN}
 
 echo "📥 Скачиваем модели Flux..."
 python3 -c "
@@ -35,5 +38,10 @@ snapshot_download(
 
 echo "✅ Все модели скачаны!"
 
-# Запуск с флагами для экономии VRAM на 24GB GPU
-python3 /ComfyUI/main.py --listen 0.0.0.0 --port 8188 --lowvram --disable-smart-memory
+# Оптимизированный запуск с флагами для 20 GB GPU
+python3 /ComfyUI/main.py \
+    --listen 0.0.0.0 \
+    --port 8188 \
+    --lowvram \
+    --reserve-vram 2 \
+    --use-pytorch-cross-attention
