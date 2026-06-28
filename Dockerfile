@@ -20,7 +20,7 @@ RUN git clone https://github.com/comfyanonymous/ComfyUI /ComfyUI && \
     pip3 install -r requirements.txt && \
     pip3 install sqlalchemy gdown
 
-# Кастомные ноды
+# Кастомные ноды (только проверенные и существующие)
 RUN cd /ComfyUI/custom_nodes && \
     git clone https://github.com/city96/ComfyUI-GGUF && \
     git clone https://github.com/jtydhr88/ComfyUI-qwenmultiangle.git && \
@@ -29,12 +29,28 @@ RUN cd /ComfyUI/custom_nodes && \
     git clone https://github.com/alexopus/ComfyUI-Image-Saver.git && \
     cd ComfyUI-Image-Saver && pip3 install -r requirements.txt && cd .. && \
     git clone https://github.com/Fannovel16/comfyui_controlnet_aux.git && \
-    cd comfyui_controlnet_aux && pip3 install -r requirements.txt && \
-    # НОВЫЕ НОДЫ:
+    cd comfyui_controlnet_aux && pip3 install -r requirements.txt && cd .. && \
     git clone https://github.com/ltdrdata/ComfyUI-Manager.git && \
     git clone https://github.com/Kosinkadink/ComfyUI-VideoHelperSuite.git && \
     cd ComfyUI-VideoHelperSuite && pip3 install -r requirements.txt && cd .. && \
     git clone https://github.com/rgthree/rgthree-comfy.git && \
+    cd rgthree-comfy && pip3 install -r requirements.txt && cd .. && \
+    git clone https://github.com/BlenderNeko/ComfyUI_ADV_CLIP_emb.git && \
+    # ВНИМАНИЕ: убираем bashable/ComfyUI-Image-Filters (возможно не существует)
+    git clone https://github.com/comfyanonymous/ComfyUI-SAM3D.git && \
+    cd ComfyUI-SAM3D && pip3 install -r requirements.txt && cd .. && \
+    # ADetailer правильная ссылка
+    git clone https://github.com/KoyoteScience/ComfyUI-ADetailer.git && \
+    cd ComfyUI-ADetailer && pip3 install -r requirements.txt && cd ..
+
+RUN pip3 install mediapipe psutil
+
+COPY start.sh /start.sh
+RUN chmod +x /start.sh
+
+WORKDIR /ComfyUI
+EXPOSE 8188
+CMD ["/start.sh"]    git clone https://github.com/rgthree/rgthree-comfy.git && \
     cd rgthree-comfy && pip3 install -r requirements.txt && cd .. && \
     git clone https://github.com/BlenderNeko/ComfyUI_ADV_CLIP_emb.git && \
     git clone https://github.com/bashable/ComfyUI-Image-Filters.git && \
