@@ -31,7 +31,7 @@ RUN cd /ComfyUI/custom_nodes && \
     git clone https://github.com/Fannovel16/comfyui_controlnet_aux.git && \
     cd comfyui_controlnet_aux && pip3 install -r requirements.txt
 
-# ДОБАВЛЕННЫЙ БЛОК (Impact Pack, Subpack, LayerStyle)
+# Impact Pack, Subpack, LayerStyle
 RUN cd /ComfyUI/custom_nodes && \
     git clone https://github.com/ltdrdata/ComfyUI-Impact-Pack.git && \
     cd ComfyUI-Impact-Pack && \
@@ -46,9 +46,13 @@ RUN cd /ComfyUI/custom_nodes && \
     cd ComfyUI_LayerStyle && \
     pip3 install -r requirements.txt
 
-RUN pip3 install mediapipe psutil
+# ComfyUI Essentials (cubiq) - ДОБАВЛЕНО
+RUN cd /ComfyUI/custom_nodes && \
+    git clone https://github.com/cubiq/ComfyUI_essentials.git && \
+    cd ComfyUI_essentials && \
+    pip3 install -r requirements.txt
 
-# ДОБАВЛЕНО: установка ultralytics
+RUN pip3 install mediapipe psutil
 RUN pip3 install ultralytics
 
 COPY start.sh /start.sh
