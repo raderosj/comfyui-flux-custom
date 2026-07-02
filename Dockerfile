@@ -18,27 +18,35 @@ RUN pip3 install "transformers==4.47.0"
 RUN pip3 install gguf opencv-python-headless
 RUN pip3 install -U "huggingface-hub[cli]" huggingface_hub
 
-RUN git clone https://github.com/comfyanonymous/ComfyUI /ComfyUI \
+# Основной ComfyUI (теперь тоже с --depth 1)
+RUN git clone --depth 1 https://github.com/comfyanonymous/ComfyUI /ComfyUI \
     && cd /ComfyUI \
     && pip3 install -r requirements.txt \
     && pip3 install sqlalchemy gdown
 
-# Кастомные ноды
+# Кастомные ноды (везде --depth 1)
 RUN cd /ComfyUI/custom_nodes \
-    && git clone https://github.com/city96/ComfyUI-GGUF \
-    && git clone https://github.com/jtydhr88/ComfyUI-qwenmultiangle.git \
-    && git clone https://github.com/yolain/ComfyUI-Easy-Use.git \
+    && git clone --depth 1 https://github.com/city96/ComfyUI-GGUF \
+    && git clone --depth 1 https://github.com/jtydhr88/ComfyUI-qwenmultiangle.git \
+    && git clone --depth 1 https://github.com/yolain/ComfyUI-Easy-Use.git \
     && cd ComfyUI-Easy-Use && pip3 install -r requirements.txt && cd .. \
-    && git clone https://github.com/alexopus/ComfyUI-Image-Saver.git \
+    && git clone --depth 1 https://github.com/alexopus/ComfyUI-Image-Saver.git \
     && cd ComfyUI-Image-Saver && pip3 install -r requirements.txt && cd .. \
-    && git clone https://github.com/Fannovel16/comfyui_controlnet_aux.git \
+    && git clone --depth 1 https://github.com/Fannovel16/comfyui_controlnet_aux.git \
     && cd comfyui_controlnet_aux && pip3 install -r requirements.txt
 
-# Ultimate SD Upscale
+# Ultimate SD Upscale (с субмодулями)
 RUN cd /ComfyUI/custom_nodes \
-    && git clone https://github.com/ssitu/ComfyUI_UltimateSDUpscale --recursive \
+    && git clone --depth 1 --recursive https://github.com/ssitu/ComfyUI_UltimateSDUpscale \
     && cd ComfyUI_UltimateSDUpscale \
     && pip3 install -r requirements.txt || true
+
+# ComfyUI-Impact-Pack
+RUN cd /ComfyUI/custom_nodes && \
+    git clone --depth 1 https://github.com/ltdrdata/ComfyUI-Impact-Pack.git && \
+    cd ComfyUI-Impact-Pack && \
+    pip3 install -r requirements.txt && \
+    python3 install.py
 
 RUN pip3 install mediapipe psutil
 
