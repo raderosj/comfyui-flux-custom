@@ -18,13 +18,13 @@ RUN pip3 install "transformers==4.47.0"
 RUN pip3 install gguf opencv-python-headless
 RUN pip3 install -U "huggingface-hub[cli]" huggingface_hub
 
-# Основной ComfyUI (теперь тоже с --depth 1)
+# Основной ComfyUI
 RUN git clone --depth 1 https://github.com/comfyanonymous/ComfyUI /ComfyUI \
     && cd /ComfyUI \
     && pip3 install -r requirements.txt \
     && pip3 install sqlalchemy gdown
 
-# Кастомные ноды (везде --depth 1)
+# Кастомные ноды
 RUN cd /ComfyUI/custom_nodes \
     && git clone --depth 1 https://github.com/city96/ComfyUI-GGUF \
     && git clone --depth 1 https://github.com/jtydhr88/ComfyUI-qwenmultiangle.git \
@@ -40,13 +40,6 @@ RUN cd /ComfyUI/custom_nodes \
     && git clone --depth 1 --recursive https://github.com/ssitu/ComfyUI_UltimateSDUpscale \
     && cd ComfyUI_UltimateSDUpscale \
     && pip3 install -r requirements.txt || true
-
-# ComfyUI-Impact-Pack
-RUN cd /ComfyUI/custom_nodes && \
-    git clone --depth 1 https://github.com/ltdrdata/ComfyUI-Impact-Pack.git && \
-    cd ComfyUI-Impact-Pack && \
-    pip3 install -r requirements.txt && \
-    python3 install.py
 
 RUN pip3 install mediapipe psutil
 
