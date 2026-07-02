@@ -23,7 +23,7 @@ RUN git clone https://github.com/comfyanonymous/ComfyUI /ComfyUI \
     && pip3 install -r requirements.txt \
     && pip3 install sqlalchemy gdown
 
-# Кастомные ноды (без VAE Tiling)
+# Кастомные ноды
 RUN cd /ComfyUI/custom_nodes \
     && git clone https://github.com/city96/ComfyUI-GGUF \
     && git clone https://github.com/jtydhr88/ComfyUI-qwenmultiangle.git \
@@ -33,6 +33,12 @@ RUN cd /ComfyUI/custom_nodes \
     && cd ComfyUI-Image-Saver && pip3 install -r requirements.txt && cd .. \
     && git clone https://github.com/Fannovel16/comfyui_controlnet_aux.git \
     && cd comfyui_controlnet_aux && pip3 install -r requirements.txt
+
+# Ultimate SD Upscale
+RUN cd /ComfyUI/custom_nodes \
+    && git clone https://github.com/ssitu/ComfyUI_UltimateSDUpscale --recursive \
+    && cd ComfyUI_UltimateSDUpscale \
+    && pip3 install -r requirements.txt || true
 
 RUN pip3 install mediapipe psutil
 
