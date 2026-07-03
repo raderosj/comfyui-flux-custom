@@ -45,9 +45,18 @@ RUN cd /ComfyUI/custom_nodes \
 RUN cd /ComfyUI/custom_nodes \
     && git clone --depth 1 https://github.com/Lerc/canvas_tab
 
-# Inpaint Crop & Stitch (для быстрого инпайтинга)
+# Impact Pack (для детекции и улучшения)
 RUN cd /ComfyUI/custom_nodes \
-    && git clone --depth 1 https://github.com/lquesada/ComfyUI-Inpaint-CropAndStitch
+    && git clone --depth 1 https://github.com/ltdrdata/ComfyUI-Impact-Pack \
+    && cd ComfyUI-Impact-Pack \
+    && pip3 install -r requirements.txt \
+    && python3 install.py
+
+# Impact Subpack (доп. провайдеры для Impact Pack)
+RUN cd /ComfyUI/custom_nodes \
+    && git clone --depth 1 https://github.com/ltdrdata/ComfyUI-Impact-Subpack \
+    && cd ComfyUI-Impact-Subpack \
+    && pip3 install -r requirements.txt
 
 RUN pip3 install mediapipe psutil
 
