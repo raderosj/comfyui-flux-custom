@@ -58,6 +58,12 @@ RUN cd /ComfyUI/custom_nodes \
     && cd ComfyUI-Impact-Subpack \
     && pip3 install -r requirements.txt
 
+# ComfyUI-KJNodes (добавлен)
+RUN cd /ComfyUI/custom_nodes \
+    && git clone --depth 1 https://github.com/kijai/ComfyUI-KJNodes.git \
+    && cd ComfyUI-KJNodes \
+    && pip3 install -r requirements.txt
+
 RUN pip3 install mediapipe psutil
 
 COPY start.sh /start.sh
