@@ -41,6 +41,14 @@ RUN cd /ComfyUI/custom_nodes \
     && cd ComfyUI_UltimateSDUpscale \
     && pip3 install -r requirements.txt || true
 
+# Canvas Tab (для рисования и маскирования)
+RUN cd /ComfyUI/custom_nodes \
+    && git clone --depth 1 https://github.com/Lerc/canvas_tab
+
+# Inpaint Crop & Stitch (для быстрого инпайтинга)
+RUN cd /ComfyUI/custom_nodes \
+    && git clone --depth 1 https://github.com/lquesada/ComfyUI-Inpaint-CropAndStitch
+
 RUN pip3 install mediapipe psutil
 
 COPY start.sh /start.sh
