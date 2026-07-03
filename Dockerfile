@@ -41,6 +41,43 @@ RUN cd /ComfyUI/custom_nodes \
     && cd ComfyUI_UltimateSDUpscale \
     && pip3 install -r requirements.txt || true
 
+# Inpaint Crop & Stitch (для быстрого инпайтинга) - ВОЗВРАЩЕН
+RUN cd /ComfyUI/custom_nodes \
+    && git clone --depth 1 https://github.com/lquesada/ComfyUI-Inpaint-CropAndStitch
+
+# Impact Pack (для детекции и улучшения)
+RUN cd /ComfyUI/custom_nodes \
+    && git clone --depth 1 https://github.com/ltdrdata/ComfyUI-Impact-Pack \
+    && cd ComfyUI-Impact-Pack \
+    && pip3 install -r requirements.txt \
+    && python3 install.py
+
+# Impact Subpack (доп. провайдеры для Impact Pack)
+RUN cd /ComfyUI/custom_nodes \
+    && git clone --depth 1 https://github.com/ltdrdata/ComfyUI-Impact-Subpack \
+    && cd ComfyUI-Impact-Subpack \
+    && pip3 install -r requirements.txt
+
+# ComfyUI-YoloWorld-EfficientSAM (добавлен после проверки)
+RUN cd /ComfyUI/custom_nodes \
+    && git clone --depth 1 https://github.com/ZHO-ZHO-ZHO/ComfyUI-YoloWorld-EfficientSAM.git \
+    && cd ComfyUI-YoloWorld-EfficientSAM \
+    && pip3 install -r requirements.txt
+
+RUN pip3 install mediapipe psutil
+
+COPY start.sh /start.sh
+RUN chmod +x /start.sh
+
+WORKDIR /ComfyUI
+EXPOSE 8188
+CMD ["/start.sh"]
+# Ultimate SD Upscale (с субмодулями)
+RUN cd /ComfyUI/custom_nodes \
+    && git clone --depth 1 --recursive https://github.com/ssitu/ComfyUI_UltimateSDUpscale \
+    && cd ComfyUI_UltimateSDUpscale \
+    && pip3 install -r requirements.txt || true
+
 # Canvas Tab (для рисования и маскирования)
 RUN cd /ComfyUI/custom_nodes \
     && git clone --depth 1 https://github.com/Lerc/canvas_tab
