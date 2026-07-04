@@ -18,7 +18,7 @@ RUN pip3 install "transformers==4.47.0"
 RUN pip3 install gguf opencv-python-headless
 RUN pip3 install -U "huggingface-hub[cli]" huggingface_hub
 
-# Установка onnxruntime-gpu
+# Установка onnxruntime-gpu (добавлено)
 RUN pip3 install onnxruntime-gpu
 
 # Основной ComfyUI
@@ -67,17 +67,11 @@ RUN cd /ComfyUI/custom_nodes \
     && cd ComfyUI-KJNodes \
     && pip3 install -r requirements.txt
 
-# ComfyUI_essentials
+# ComfyUI_essentials (добавлено)
 RUN cd /ComfyUI/custom_nodes \
     && git clone --depth 1 https://github.com/cubiq/ComfyUI_essentials.git \
     && cd ComfyUI_essentials \
     && pip3 install -r requirements.txt || true
-
-# ComfyUI-TuZi-Flux-Kontext (добавлен)
-RUN cd /ComfyUI/custom_nodes \
-    && git clone --depth 1 https://github.com/TuZiO/ComfyUI-TuZi-Flux-Kontext.git \
-    && cd ComfyUI-TuZi-Flux-Kontext \
-    && pip3 install -r requirements.txt
 
 RUN pip3 install mediapipe psutil
 
