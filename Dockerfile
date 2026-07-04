@@ -73,6 +73,13 @@ RUN cd /ComfyUI/custom_nodes \
     && cd ComfyUI_essentials \
     && pip3 install -r requirements.txt || true
 
+# ===== НОВАЯ НОДА ДЛЯ KONTEXT INPAINTING =====
+RUN cd /ComfyUI/custom_nodes \
+    && git clone https://github.com/ZenAI-Vietnam/ComfyUI-Kontext-Inpainting.git \
+    && cd ComfyUI-Kontext-Inpainting \
+    && pip3 install -r requirements.txt || true
+# ============================================
+
 RUN pip3 install mediapipe psutil
 
 COPY start.sh /start.sh
