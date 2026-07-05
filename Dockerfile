@@ -18,8 +18,19 @@ RUN pip3 install "transformers==4.47.0"
 RUN pip3 install gguf opencv-python-headless
 RUN pip3 install -U "huggingface-hub[cli]" huggingface_hub
 
-# Установка onnxruntime-gpu (добавлено)
+# Установка onnxruntime-gpu
 RUN pip3 install onnxruntime-gpu
+
+# ===== ДОБАВЛЕНЫ ПАКЕТЫ ДЛЯ PULID И INSIGHTFACE =====
+RUN pip3 install \
+    insightface \
+    facexlib \
+    opencv-contrib-python \
+    timm \
+    einops \
+    albumentations \
+    accelerate
+# ====================================================
 
 # Основной ComfyUI
 RUN git clone --depth 1 https://github.com/comfyanonymous/ComfyUI /ComfyUI \
@@ -67,25 +78,25 @@ RUN cd /ComfyUI/custom_nodes \
     && cd ComfyUI-KJNodes \
     && pip3 install -r requirements.txt
 
-# ComfyUI_essentials (добавлено)
+# ComfyUI_essentials
 RUN cd /ComfyUI/custom_nodes \
     && git clone --depth 1 https://github.com/cubiq/ComfyUI_essentials.git \
     && cd ComfyUI_essentials \
     && pip3 install -r requirements.txt || true
 
-# ===== НОВАЯ НОДА ДЛЯ KONTEXT INPAINTING =====
+# ===== НОДА ДЛЯ KONTEXT INPAINTING =====
 RUN cd /ComfyUI/custom_nodes \
     && git clone https://github.com/ZenAI-Vietnam/ComfyUI-Kontext-Inpainting.git \
     && cd ComfyUI-Kontext-Inpainting \
     && pip3 install -r requirements.txt || true
-# ============================================
+# =======================================
 
-# ===== ДОБАВЛЕНА НОДА ДЛЯ PULID-FLUX =====
+# ===== НОДА ДЛЯ PULID-FLUX =====
 RUN cd /ComfyUI/custom_nodes \
     && git clone --depth 1 https://github.com/balazik/ComfyUI-PuLID-Flux.git \
     && cd ComfyUI-PuLID-Flux \
     && pip3 install -r requirements.txt || true
-# ============================================
+# ================================
 
 RUN pip3 install mediapipe psutil
 
