@@ -5,6 +5,8 @@ mkdir -p /ComfyUI/models/text_encoders
 mkdir -p /ComfyUI/models/vae
 mkdir -p /ComfyUI/models/controlnet
 mkdir -p /ComfyUI/models/loras
+mkdir -p /ComfyUI/models/pulid
+mkdir -p /ComfyUI/models/insightface/models
 
 # Ключевая переменная для PyTorch (решает проблему фрагментации памяти)
 export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
