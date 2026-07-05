@@ -80,6 +80,13 @@ RUN cd /ComfyUI/custom_nodes \
     && pip3 install -r requirements.txt || true
 # ============================================
 
+# ===== ДОБАВЛЕНА НОДА ДЛЯ PULID-FLUX =====
+RUN cd /ComfyUI/custom_nodes \
+    && git clone --depth 1 https://github.com/balazik/ComfyUI-PuLID-Flux.git \
+    && cd ComfyUI-PuLID-Flux \
+    && pip3 install -r requirements.txt || true
+# ============================================
+
 RUN pip3 install mediapipe psutil
 
 COPY start.sh /start.sh
