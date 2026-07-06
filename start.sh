@@ -1,17 +1,20 @@
 #!/bin/bash
 
+# Создаём базовые папки (на всякий случай, если snapshot_download не сработает)
 mkdir -p /ComfyUI/models/diffusion_models
 mkdir -p /ComfyUI/models/text_encoders
 mkdir -p /ComfyUI/models/vae
 mkdir -p /ComfyUI/models/controlnet
 mkdir -p /ComfyUI/models/loras
-mkdir -p /ComfyUI/models/pulid
-mkdir -p /ComfyUI/models/insightface/models
+mkdir -p /ComfyUI/models/dwpose
+mkdir -p /ComfyUI/models/ultralytics/segm
+mkdir -p /ComfyUI/models/sams
+mkdir -p /ComfyUI/models/upscale_models
 
 export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
 export HF_TOKEN=${HF_TOKEN}
 
-# Используем hf_transfer
+# Используем hf_transfer для ускорения
 export HF_HUB_ENABLE_HF_TRANSFER=1
 
 echo "========================================"
@@ -32,6 +35,7 @@ import time
 
 t0 = time.time()
 
+# Скачиваем Flux модели
 snapshot_download(
     repo_id="raderos/comfyui-models-flux",
     local_dir="/ComfyUI/models",
@@ -41,6 +45,30 @@ snapshot_download(
 )
 
 print(f"Flux готов. ({time.time()-t0:.1f} сек)")
+EOF
+
+echo ""
+echo "========================================"
+echo "Скачиваем модели Qwen..."
+echo "========================================"
+
+python3 << 'EOF'
+from huggingface_hub import snapshot_download
+import os
+import time
+
+t0 = time.time()
+
+# Скачиваем Qwen модели
+snapshot_download(
+    repo_id="raderos/comfyui-models-qwen",
+    local_dir="/ComfyUI/models",
+    token=os.environ.get("HF_TOKEN"),
+    resume_download=True,
+    max_workers=2,
+)
+
+print(f"Qwen готов. ({time.time()-t0:.1f} сек)")
 EOF
 
 echo ""
