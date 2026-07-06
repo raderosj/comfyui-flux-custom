@@ -14,8 +14,9 @@ mkdir -p /ComfyUI/models/upscale_models
 export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
 export HF_TOKEN=${HF_TOKEN}
 
-# Используем hf_transfer для ускорения
-export HF_HUB_ENABLE_HF_TRANSFER=1
+# ===== ИСПРАВЛЕНО: используем XET_HIGH_PERFORMANCE вместо устаревшего HF_TRANSFER =====
+export HF_XET_HIGH_PERFORMANCE=1
+# ===================================================================================
 
 echo "========================================"
 echo "Python:"
@@ -59,9 +60,9 @@ import time
 
 t0 = time.time()
 
-# Скачиваем Qwen модели
+# Скачиваем Qwen модели из нового публичного репозитория
 snapshot_download(
-    repo_id="raderos/comfyui-models-qwen",
+    repo_id="raderos/qwenpublic",  # ИЗМЕНЕНО на новый репозиторий
     local_dir="/ComfyUI/models",
     token=os.environ.get("HF_TOKEN"),
     resume_download=True,
