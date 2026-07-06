@@ -21,6 +21,17 @@ RUN pip3 install -U "huggingface-hub[cli]" huggingface_hub
 # Установка onnxruntime-gpu
 RUN pip3 install onnxruntime-gpu
 
+# ===== ЗАВИСИМОСТИ ДЛЯ PuLID =====
+RUN pip3 install \
+    insightface \
+    facexlib \
+    timm \
+    einops \
+    albumentations \
+    accelerate \
+    mediapipe \
+    psutil
+
 # Основной ComfyUI
 RUN git clone --depth 1 https://github.com/comfyanonymous/ComfyUI /ComfyUI \
     && cd /ComfyUI \
@@ -79,7 +90,11 @@ RUN cd /ComfyUI/custom_nodes \
     && cd ComfyUI-Kontext-Inpainting \
     && pip3 install -r requirements.txt || true
 
-RUN pip3 install mediapipe psutil
+# ===== PuLID Flux =====
+RUN cd /ComfyUI/custom_nodes \
+    && git clone --depth 1 https://github.com/balazik/ComfyUI-PuLID-Flux.git \
+    && cd ComfyUI-PuLID-Flux \
+    && pip3 install -r requirements.txt || true
 
 COPY start.sh /start.sh
 RUN chmod +x /start.sh
