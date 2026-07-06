@@ -14,6 +14,9 @@ RUN apt-get update && apt-get install -y \
 RUN pip3 install torch==2.6.0 torchvision==0.21.0 torchaudio==2.6.0 \
     --index-url https://download.pytorch.org/whl/cu124
 
+# ===== XFORMERS ДЛЯ ОПТИМИЗАЦИИ =====
+RUN pip3 install xformers==0.0.29.post2
+
 RUN pip3 install "transformers==4.47.0"
 RUN pip3 install gguf opencv-python-headless
 RUN pip3 install -U "huggingface-hub[cli]" huggingface_hub
@@ -38,7 +41,7 @@ RUN git clone --depth 1 https://github.com/comfyanonymous/ComfyUI /ComfyUI \
     && pip3 install -r requirements.txt \
     && pip3 install sqlalchemy gdown
 
-# Кастомные ноды
+# Кастомные ноды (все с --depth 1)
 RUN cd /ComfyUI/custom_nodes \
     && git clone --depth 1 https://github.com/city96/ComfyUI-GGUF \
     && git clone --depth 1 https://github.com/jtydhr88/ComfyUI-qwenmultiangle.git \
@@ -86,38 +89,38 @@ RUN cd /ComfyUI/custom_nodes \
 
 # Kontext Inpainting
 RUN cd /ComfyUI/custom_nodes \
-    && git clone https://github.com/ZenAI-Vietnam/ComfyUI-Kontext-Inpainting.git \
+    && git clone --depth 1 https://github.com/ZenAI-Vietnam/ComfyUI-Kontext-Inpainting.git \
     && cd ComfyUI-Kontext-Inpainting \
     && pip3 install -r requirements.txt || true
 
-# ===== PuLID Flux =====
+# ===== PuLID Flux (БЕЗ --depth 1) =====
 RUN cd /ComfyUI/custom_nodes \
-    && git clone --depth 1 https://github.com/balazik/ComfyUI-PuLID-Flux.git \
+    && git clone https://github.com/balazik/ComfyUI-PuLID-Flux.git \
     && cd ComfyUI-PuLID-Flux \
     && pip3 install -r requirements.txt || true
 
 # ===== Patch PuLID for ComfyUI 0.27+ =====
 RUN python3 - <<'PY'
+import re
 from pathlib import Path
 
 p = Path("/ComfyUI/custom_nodes/ComfyUI-PuLID-Flux/pulidflux.py")
 
 text = p.read_text()
 
-old = """    guidance: Tensor = None,
-    control=None,
-) -> Tensor:"""
+if "**kwargs" not in text:
+    text = re.sub(
+        r'(def forward_orig\(.*?)(\)\s*->\s*Tensor:)',
+        lambda m: m.group(1).rstrip().rstrip(",") +
+                  ",\n    timestep_zero_index=None,"
+                  "\n    transformer_options=None,"
+                  "\n    attn_mask=None,"
+                  "\n    **kwargs" +
+                  m.group(2),
+        text,
+        flags=re.DOTALL,
+    )
 
-new = """    guidance: Tensor = None,
-    control=None,
-    timestep_zero_index=None,
-    transformer_options=None,
-    attn_mask=None,
-    **kwargs,
-) -> Tensor:"""
-
-if "timestep_zero_index=None" not in text:
-    text = text.replace(old, new)
     p.write_text(text)
     print("PuLID patched successfully.")
 else:
