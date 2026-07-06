@@ -96,6 +96,34 @@ RUN cd /ComfyUI/custom_nodes \
     && cd ComfyUI-PuLID-Flux \
     && pip3 install -r requirements.txt || true
 
+# ===== Patch PuLID for ComfyUI 0.27+ =====
+RUN python3 - <<'PY'
+from pathlib import Path
+
+p = Path("/ComfyUI/custom_nodes/ComfyUI-PuLID-Flux/pulidflux.py")
+
+text = p.read_text()
+
+old = """    guidance: Tensor = None,
+    control=None,
+) -> Tensor:"""
+
+new = """    guidance: Tensor = None,
+    control=None,
+    timestep_zero_index=None,
+    transformer_options=None,
+    attn_mask=None,
+    **kwargs,
+) -> Tensor:"""
+
+if "timestep_zero_index=None" not in text:
+    text = text.replace(old, new)
+    p.write_text(text)
+    print("PuLID patched successfully.")
+else:
+    print("PuLID already patched.")
+PY
+
 COPY start.sh /start.sh
 RUN chmod +x /start.sh
 
