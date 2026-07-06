@@ -14,8 +14,8 @@ RUN apt-get update && apt-get install -y \
 RUN pip3 install torch==2.6.0 torchvision==0.21.0 torchaudio==2.6.0 \
     --index-url https://download.pytorch.org/whl/cu124
 
-# ===== XFORMERS ДЛЯ ОПТИМИЗАЦИИ =====
-RUN pip3 install xformers==0.0.29.post2
+# ===== XFORMERS ДЛЯ ОПТИМИЗАЦИИ (ускорение) =====
+RUN pip3 install xformers
 
 RUN pip3 install "transformers==4.47.0"
 RUN pip3 install gguf opencv-python-headless
@@ -24,7 +24,7 @@ RUN pip3 install -U "huggingface-hub[cli]" huggingface_hub
 # Установка onnxruntime-gpu
 RUN pip3 install onnxruntime-gpu
 
-# ===== ЗАВИСИМОСТИ ДЛЯ PuLID =====
+# ===== БАЗОВЫЕ ЗАВИСИМОСТИ =====
 RUN pip3 install \
     insightface \
     facexlib \
@@ -33,7 +33,8 @@ RUN pip3 install \
     albumentations \
     accelerate \
     mediapipe \
-    psutil
+    psutil \
+    ultralytics  # Для YOLO и сегментации
 
 # Основной ComfyUI
 RUN git clone --depth 1 https://github.com/comfyanonymous/ComfyUI /ComfyUI \
@@ -92,40 +93,6 @@ RUN cd /ComfyUI/custom_nodes \
     && git clone --depth 1 https://github.com/ZenAI-Vietnam/ComfyUI-Kontext-Inpainting.git \
     && cd ComfyUI-Kontext-Inpainting \
     && pip3 install -r requirements.txt || true
-
-# ===== PuLID Flux (БЕЗ --depth 1) =====
-RUN cd /ComfyUI/custom_nodes \
-    && git clone https://github.com/balazik/ComfyUI-PuLID-Flux.git \
-    && cd ComfyUI-PuLID-Flux \
-    && pip3 install -r requirements.txt || true
-
-# ===== Patch PuLID for ComfyUI 0.27+ =====
-RUN python3 - <<'PY'
-import re
-from pathlib import Path
-
-p = Path("/ComfyUI/custom_nodes/ComfyUI-PuLID-Flux/pulidflux.py")
-
-text = p.read_text()
-
-if "**kwargs" not in text:
-    text = re.sub(
-        r'(def forward_orig\(.*?)(\)\s*->\s*Tensor:)',
-        lambda m: m.group(1).rstrip().rstrip(",") +
-                  ",\n    timestep_zero_index=None,"
-                  "\n    transformer_options=None,"
-                  "\n    attn_mask=None,"
-                  "\n    **kwargs" +
-                  m.group(2),
-        text,
-        flags=re.DOTALL,
-    )
-
-    p.write_text(text)
-    print("PuLID patched successfully.")
-else:
-    print("PuLID already patched.")
-PY
 
 COPY start.sh /start.sh
 RUN chmod +x /start.sh
