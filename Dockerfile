@@ -51,7 +51,9 @@ RUN cd /ComfyUI/custom_nodes \
     && git clone --depth 1 https://github.com/alexopus/ComfyUI-Image-Saver.git \
     && cd ComfyUI-Image-Saver && pip3 install -r requirements.txt && cd .. \
     && git clone --depth 1 https://github.com/Fannovel16/comfyui_controlnet_aux.git \
-    && cd comfyui_controlnet_aux && pip3 install -r requirements.txt
+    && cd comfyui_controlnet_aux && pip3 install -r requirements.txt \
+    && git clone --depth 1 https://github.com/XLabs-AI/x-flux-comfyui.git \
+    && cd x-flux-comfyui && pip3 install -r requirements.txt
 
 # Ultimate SD Upscale
 RUN cd /ComfyUI/custom_nodes \
