@@ -14,9 +14,9 @@ mkdir -p /ComfyUI/models/upscale_models
 export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
 export HF_TOKEN=${HF_TOKEN}
 
-# ===== ИСПРАВЛЕНО: используем XET_HIGH_PERFORMANCE вместо устаревшего HF_TRANSFER =====
+# ===== ВКЛЮЧАЕМ ВЫСОКОПРОИЗВОДИТЕЛЬНЫЙ ПРОТОКОЛ XET =====
 export HF_XET_HIGH_PERFORMANCE=1
-# ===================================================================================
+# =========================================================
 
 echo "========================================"
 echo "Python:"
@@ -36,13 +36,11 @@ import time
 
 t0 = time.time()
 
-# Скачиваем Flux модели
 snapshot_download(
     repo_id="raderos/comfyui-models-flux",
     local_dir="/ComfyUI/models",
     token=os.environ.get("HF_TOKEN"),
-    resume_download=True,
-    max_workers=2,
+    max_workers=1,  # Один поток для стабильности
 )
 
 print(f"Flux готов. ({time.time()-t0:.1f} сек)")
@@ -60,13 +58,11 @@ import time
 
 t0 = time.time()
 
-# Скачиваем Qwen модели из нового публичного репозитория
 snapshot_download(
-    repo_id="raderos/qwenpublic",  # ИЗМЕНЕНО на новый репозиторий
+    repo_id="raderos/qwenpublic",
     local_dir="/ComfyUI/models",
     token=os.environ.get("HF_TOKEN"),
-    resume_download=True,
-    max_workers=2,
+    max_workers=1,  # Один поток для стабильности
 )
 
 print(f"Qwen готов. ({time.time()-t0:.1f} сек)")
