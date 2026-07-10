@@ -14,10 +14,9 @@ mkdir -p /ComfyUI/models/upscale_models
 export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
 export HF_TOKEN=${HF_TOKEN}
 
-# ===== ВКЛЮЧАЕМ ВЫСОКОПРОИЗВОДИТЕЛЬНЫЙ ПРОТОКОЛ XET =====
-export HF_XET_HIGH_PERFORMANCE=1
-export HF_HUB_ENABLE_HF_TRANSFER=1
-# =========================================================
+# ===== ОТКЛЮЧАЕМ XET — раньше его не было, скачка шла быстрее обычным HTTPS =====
+export HF_HUB_DISABLE_XET=1
+# ==================================================================================
 
 echo "========================================"
 echo "Python:"
@@ -26,8 +25,7 @@ python3 --version
 echo "huggingface_hub:"
 python3 -c "import huggingface_hub; print(huggingface_hub.__version__)"
 
-echo "Проверка hf_xet:"
-python3 -c "import hf_xet; print('hf_xet OK:', hf_xet.__version__)" || echo "!!! hf_xet НЕ УСТАНОВЛЕН — скачивание идёт медленным fallback-путём !!!"
+echo "Проверка: Xet отключён (HF_HUB_DISABLE_XET=$HF_HUB_DISABLE_XET)"
 
 echo "========================================"
 echo "Скачиваем модели Flux..."
