@@ -1,81 +1,108 @@
-#!/bin/bash
+FROM nvidia/cuda:12.4.1-cudnn-runtime-ubuntu22.04
 
-# Создаём базовые папки (на всякий случай, если snapshot_download не сработает)
-mkdir -p /ComfyUI/models/diffusion_models
-mkdir -p /ComfyUI/models/text_encoders
-mkdir -p /ComfyUI/models/vae
-mkdir -p /ComfyUI/models/controlnet
-mkdir -p /ComfyUI/models/loras
-mkdir -p /ComfyUI/models/dwpose
-mkdir -p /ComfyUI/models/ultralytics/segm
-mkdir -p /ComfyUI/models/sams
-mkdir -p /ComfyUI/models/upscale_models
+ENV DEBIAN_FRONTEND=noninteractive
 
-export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
-export HF_TOKEN=${HF_TOKEN}
+RUN apt-get update && apt-get install -y \
+    git \
+    wget \
+    python3 \
+    python3-pip \
+    libgl1 \
+    libglib2.0-0 \
+    && rm -rf /var/lib/apt/lists/*
 
-# ===== ВКЛЮЧАЕМ ВЫСОКОПРОИЗВОДИТЕЛЬНЫЙ ПРОТОКОЛ XET =====
-export HF_XET_HIGH_PERFORMANCE=1
-# =========================================================
+RUN pip3 install torch==2.6.0 torchvision==0.21.0 torchaudio==2.6.0 \
+    --index-url https://download.pytorch.org/whl/cu124
 
-echo "========================================"
-echo "Python:"
-python3 --version
+# ===== XFORMERS ДЛЯ ОПТИМИЗАЦИИ (ускорение) =====
+RUN pip3 install xformers
 
-echo "huggingface_hub:"
-python3 -c "import huggingface_hub; print(huggingface_hub.__version__)"
+RUN pip3 install "transformers==4.47.0"
+RUN pip3 install gguf opencv-python-headless
 
-echo "========================================"
-echo "Скачиваем модели Flux..."
-echo "========================================"
+# ===== УСТАНОВКА HUGGINGFACE_HUB С ПОДДЕРЖКОЙ XET =====
+RUN pip3 install -U "huggingface_hub[hf_xet]" hf_transfer
 
-python3 << 'EOF'
-from huggingface_hub import snapshot_download
-import os
-import time
+# Установка onnxruntime-gpu
+RUN pip3 install onnxruntime-gpu
 
-t0 = time.time()
+# ===== БАЗОВЫЕ ЗАВИСИМОСТИ =====
+RUN pip3 install \
+    insightface \
+    facexlib \
+    timm \
+    einops \
+    albumentations \
+    accelerate \
+    mediapipe \
+    psutil \
+    ultralytics  # Для YOLO и сегментации
 
-snapshot_download(
-    repo_id="raderos/comfyui-models-flux",
-    local_dir="/ComfyUI/models",
-    token=os.environ.get("HF_TOKEN"),
-    max_workers=1,  # Один поток для стабильности
-)
+# Основной ComfyUI
+RUN git clone --depth 1 https://github.com/comfyanonymous/ComfyUI /ComfyUI \
+    && cd /ComfyUI \
+    && pip3 install -r requirements.txt \
+    && pip3 install sqlalchemy gdown
 
-print(f"Flux готов. ({time.time()-t0:.1f} сек)")
-EOF
+# Кастомные ноды (все с --depth 1)
+RUN cd /ComfyUI/custom_nodes \
+    && git clone --depth 1 https://github.com/city96/ComfyUI-GGUF \
+    && git clone --depth 1 https://github.com/jtydhr88/ComfyUI-qwenmultiangle.git \
+    && git clone --depth 1 https://github.com/yolain/ComfyUI-Easy-Use.git \
+    && cd ComfyUI-Easy-Use && pip3 install -r requirements.txt && cd .. \
+    && git clone --depth 1 https://github.com/alexopus/ComfyUI-Image-Saver.git \
+    && cd ComfyUI-Image-Saver && pip3 install -r requirements.txt && cd .. \
+    && git clone --depth 1 https://github.com/Fannovel16/comfyui_controlnet_aux.git \
+    && cd comfyui_controlnet_aux && pip3 install -r requirements.txt && cd .. \
+    && git clone --depth 1 https://github.com/XLabs-AI/x-flux-comfyui.git \
+    && cd x-flux-comfyui && pip3 install -r requirements.txt
 
-echo ""
-echo "========================================"
-echo "Скачиваем модели Qwen..."
-echo "========================================"
+# Ultimate SD Upscale
+RUN cd /ComfyUI/custom_nodes \
+    && git clone --depth 1 --recursive https://github.com/ssitu/ComfyUI_UltimateSDUpscale \
+    && cd ComfyUI_UltimateSDUpscale \
+    && pip3 install -r requirements.txt || true
 
-python3 << 'EOF'
-from huggingface_hub import snapshot_download
-import os
-import time
+# Inpaint Crop & Stitch
+RUN cd /ComfyUI/custom_nodes \
+    && git clone --depth 1 https://github.com/lquesada/ComfyUI-Inpaint-CropAndStitch
 
-t0 = time.time()
+# Impact Pack
+RUN cd /ComfyUI/custom_nodes \
+    && git clone --depth 1 https://github.com/ltdrdata/ComfyUI-Impact-Pack \
+    && cd ComfyUI-Impact-Pack \
+    && pip3 install -r requirements.txt \
+    && python3 install.py
 
-snapshot_download(
-    repo_id="raderos/qwenpublic",
-    local_dir="/ComfyUI/models",
-    token=os.environ.get("HF_TOKEN"),
-    max_workers=1,  # Один поток для стабильности
-)
+# Impact Subpack
+RUN cd /ComfyUI/custom_nodes \
+    && git clone --depth 1 https://github.com/ltdrdata/ComfyUI-Impact-Subpack \
+    && cd ComfyUI-Impact-Subpack \
+    && pip3 install -r requirements.txt
 
-print(f"Qwen готов. ({time.time()-t0:.1f} сек)")
-EOF
+# KJNodes
+RUN cd /ComfyUI/custom_nodes \
+    && git clone --depth 1 https://github.com/kijai/ComfyUI-KJNodes.git \
+    && cd ComfyUI-KJNodes \
+    && pip3 install -r requirements.txt
 
-echo ""
-echo "========================================"
-echo "Запуск ComfyUI..."
-echo "========================================"
+# Essentials
+RUN cd /ComfyUI/custom_nodes \
+    && git clone --depth 1 https://github.com/cubiq/ComfyUI_essentials.git \
+    && cd ComfyUI_essentials \
+    && pip3 install -r requirements.txt || true
 
-python3 /ComfyUI/main.py \
-    --listen 0.0.0.0 \
-    --port 8188 \
-    --lowvram \
-    --reserve-vram 2 \
-    --use-pytorch-cross-attention
+# Kontext Inpainting
+RUN cd /ComfyUI/custom_nodes \
+    && git clone --depth 1 https://github.com/ZenAI-Vietnam/ComfyUI-Kontext-Inpainting.git \
+    && cd ComfyUI-Kontext-Inpainting \
+    && pip3 install -r requirements.txt || true
+
+COPY start.sh /start.sh
+RUN chmod +x /start.sh
+
+WORKDIR /ComfyUI
+
+EXPOSE 8188
+
+CMD ["/start.sh"]
