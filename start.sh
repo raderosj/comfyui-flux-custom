@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Создаём базовые папки (на всякий случай, если snapshot_download не сработает)
+# Создаём базовые папки
 mkdir -p /ComfyUI/models/diffusion_models
 mkdir -p /ComfyUI/models/text_encoders
 mkdir -p /ComfyUI/models/vae
@@ -14,9 +14,11 @@ mkdir -p /ComfyUI/models/upscale_models
 export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
 export HF_TOKEN=${HF_TOKEN}
 
-# ===== ОТКЛЮЧАЕМ XET — раньше его не было, скачка шла быстрее обычным HTTPS =====
-export HF_HUB_DISABLE_XET=1
-# ==================================================================================
+# ===== ИСПОЛЬЗУЕМ ОБЫЧНЫЙ HTTPS (БЕЗ XET) =====
+# Не включаем и не отключаем Xet — просто не трогаем
+# export HF_XET_HIGH_PERFORMANCE=1  # Закомментировано
+# export HF_HUB_DISABLE_XET=1       # Закомментировано
+# ===============================================
 
 echo "========================================"
 echo "Python:"
@@ -24,8 +26,6 @@ python3 --version
 
 echo "huggingface_hub:"
 python3 -c "import huggingface_hub; print(huggingface_hub.__version__)"
-
-echo "Проверка: Xet отключён (HF_HUB_DISABLE_XET=$HF_HUB_DISABLE_XET)"
 
 echo "========================================"
 echo "Скачиваем модели Flux..."
@@ -42,7 +42,7 @@ snapshot_download(
     repo_id="raderos/comfyui-models-flux",
     local_dir="/ComfyUI/models",
     token=os.environ.get("HF_TOKEN"),
-    max_workers=8,
+    max_workers=4,  # Оптимальное значение для HTTPS
 )
 
 print(f"Flux готов. ({time.time()-t0:.1f} сек)")
@@ -64,7 +64,7 @@ snapshot_download(
     repo_id="raderos/qwenpublic",
     local_dir="/ComfyUI/models",
     token=os.environ.get("HF_TOKEN"),
-    max_workers=8,
+    max_workers=4,  # Оптимальное значение для HTTPS
 )
 
 print(f"Qwen готов. ({time.time()-t0:.1f} сек)")
