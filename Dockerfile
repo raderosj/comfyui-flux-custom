@@ -96,12 +96,29 @@ RUN cd /ComfyUI/custom_nodes \
     && cd ComfyUI-Kontext-Inpainting \
     && pip3 install -r requirements.txt || true
 
-# ===== LAYERSTYLE (добавлен) =====
+# ===== LAYERSTYLE =====
 RUN cd /ComfyUI/custom_nodes \
     && git clone --depth 1 https://github.com/chflame163/ComfyUI_LayerStyle \
     && cd ComfyUI_LayerStyle \
     && pip3 install -r requirements.txt || true
-# =================================
+
+# ===== IC-LIGHT =====
+RUN cd /ComfyUI/custom_nodes \
+    && git clone --depth 1 https://github.com/kijai/ComfyUI-IC-Light.git \
+    && cd ComfyUI-IC-Light \
+    && pip3 install -r requirements.txt || true
+
+# ===== REMBG =====
+RUN cd /ComfyUI/custom_nodes \
+    && git clone --depth 1 https://github.com/Jcd1230/rembg-comfyui-node.git \
+    && cd rembg-comfyui-node \
+    && pip3 install -r requirements.txt || true
+
+# ===== PIXAROMA (ДОБАВЛЕН) =====
+RUN cd /ComfyUI/custom_nodes \
+    && git clone --depth 1 https://github.com/pixaroma/ComfyUI-Pixaroma.git \
+    && cd ComfyUI-Pixaroma \
+    && pip3 install -r requirements.txt || true
 
 COPY start.sh /start.sh
 RUN chmod +x /start.sh
