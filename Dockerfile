@@ -96,6 +96,13 @@ RUN cd /ComfyUI/custom_nodes \
     && cd ComfyUI-Kontext-Inpainting \
     && pip3 install -r requirements.txt || true
 
+# ===== LAYERSTYLE (добавлен) =====
+RUN cd /ComfyUI/custom_nodes \
+    && git clone --depth 1 https://github.com/chflame163/ComfyUI_LayerStyle \
+    && cd ComfyUI_LayerStyle \
+    && pip3 install -r requirements.txt || true
+# =================================
+
 COPY start.sh /start.sh
 RUN chmod +x /start.sh
 
