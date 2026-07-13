@@ -21,6 +21,9 @@ RUN pip3 install "transformers==4.47.0"
 RUN pip3 install gguf opencv-python-headless
 RUN pip3 install -U "huggingface-hub[cli]" huggingface_hub
 
+# ===== ДОПОЛНИТЕЛЬНЫЕ ЗАВИСИМОСТИ =====
+RUN pip3 install sentencepiece safetensors
+
 # Установка onnxruntime-gpu
 RUN pip3 install onnxruntime-gpu
 
@@ -34,7 +37,7 @@ RUN pip3 install \
     accelerate \
     mediapipe \
     psutil \
-    ultralytics  # Для YOLO и сегментации
+    ultralytics
 
 # Основной ComfyUI
 RUN git clone --depth 1 https://github.com/comfyanonymous/ComfyUI /ComfyUI \
@@ -108,9 +111,15 @@ RUN cd /ComfyUI/custom_nodes \
     && cd rembg-comfyui-node \
     && pip3 install -r requirements.txt || true
 
-# ===== RC IMAGE COMPOSITOR (ВМЕСТО PIXAROMA И IC-LIGHT) =====
+# ===== RC IMAGE COMPOSITOR =====
 RUN cd /ComfyUI/custom_nodes \
     && git clone --depth 1 https://github.com/kj863257/ComfyUI_RC_Image_Compositor.git
+
+# ===== INSERT ANYTHING =====
+RUN cd /ComfyUI/custom_nodes \
+    && git clone --depth 1 https://github.com/mo230761/InsertAnything-ComfyUI-official.git \
+    && cd InsertAnything-ComfyUI-official \
+    && if [ -f requirements.txt ]; then pip3 install -r requirements.txt; fi
 
 COPY start.sh /start.sh
 RUN chmod +x /start.sh
