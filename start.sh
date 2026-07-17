@@ -14,8 +14,9 @@ mkdir -p /ComfyUI/models/upscale_models
 export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
 export HF_TOKEN=${HF_TOKEN}
 
-# Включаем hf_transfer
-export HF_HUB_ENABLE_HF_TRANSFER=1
+# ===== Новый высокопроизводительный движок Hugging Face (Xet) =====
+export HF_XET_HIGH_PERFORMANCE=1
+export HF_XET_RECONSTRUCT_WRITE_SEQUENTIALLY=1
 
 # Если не задано - используем старый репозиторий
 export HF_REPOS=${HF_REPOS:-raderos/comfyui-models-flux}
@@ -27,7 +28,7 @@ python3 --version
 echo "huggingface_hub:"
 python3 -c "import huggingface_hub; print(huggingface_hub.__version__)"
 
-echo "HF Transfer: $HF_HUB_ENABLE_HF_TRANSFER"
+echo "HF_XET_HIGH_PERFORMANCE=$HF_XET_HIGH_PERFORMANCE"
 
 echo "========================================"
 echo "Будут скачаны репозитории:"
@@ -44,19 +45,20 @@ total_start = time.time()
 workers = min(os.cpu_count() or 4, 8)
 
 print(f"Используем {workers} потоков")
-print(f"HF Transfer: {os.environ.get('HF_HUB_ENABLE_HF_TRANSFER')}")
+print(f"HF_XET_HIGH_PERFORMANCE = {os.environ.get('HF_XET_HIGH_PERFORMANCE')}")
 print("")
 
 repos = os.environ.get("HF_REPOS", "").split(",")
 
 for repo in repos:
     repo = repo.strip()
+
     if not repo:
         continue
 
-    print("=" * 50)
+    print("=" * 60)
     print(f"Скачиваем: {repo}")
-    print("=" * 50)
+    print("=" * 60)
 
     t0 = time.time()
 
@@ -69,9 +71,9 @@ for repo in repos:
 
     print(f"✓ {repo} готов за {time.time()-t0:.1f} сек\n")
 
-print("=" * 50)
+print("=" * 60)
 print(f"Все модели готовы за {time.time()-total_start:.1f} сек")
-print("=" * 50)
+print("=" * 60)
 EOF
 
 echo ""
