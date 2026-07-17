@@ -14,11 +14,11 @@ mkdir -p /ComfyUI/models/upscale_models
 export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
 export HF_TOKEN=${HF_TOKEN}
 
-# ===== ИСПОЛЬЗУЕМ ОБЫЧНЫЙ HTTPS (БЕЗ XET) =====
-# Не включаем и не отключаем Xet — просто не трогаем
-# export HF_XET_HIGH_PERFORMANCE=1  # Закомментировано
-# export HF_HUB_DISABLE_XET=1       # Закомментировано
-# ===============================================
+# Включаем hf_transfer
+export HF_HUB_ENABLE_HF_TRANSFER=1
+
+# Если не задано - используем старый репозиторий
+export HF_REPOS=${HF_REPOS:-raderos/comfyui-models-flux}
 
 echo "========================================"
 echo "Python:"
@@ -27,47 +27,51 @@ python3 --version
 echo "huggingface_hub:"
 python3 -c "import huggingface_hub; print(huggingface_hub.__version__)"
 
+echo "HF Transfer: $HF_HUB_ENABLE_HF_TRANSFER"
+
 echo "========================================"
-echo "Скачиваем модели Flux..."
+echo "Будут скачаны репозитории:"
+echo "$HF_REPOS"
 echo "========================================"
 
-python3 << 'EOF'
+python3 <<EOF
 from huggingface_hub import snapshot_download
 import os
 import time
 
-t0 = time.time()
+total_start = time.time()
 
-snapshot_download(
-    repo_id="raderos/comfyui-models-flux",
-    local_dir="/ComfyUI/models",
-    token=os.environ.get("HF_TOKEN"),
-    max_workers=4,  # Оптимальное значение для HTTPS
-)
+workers = min(os.cpu_count() or 4, 8)
 
-print(f"Flux готов. ({time.time()-t0:.1f} сек)")
-EOF
+print(f"Используем {workers} потоков")
+print(f"HF Transfer: {os.environ.get('HF_HUB_ENABLE_HF_TRANSFER')}")
+print("")
 
-echo ""
-echo "========================================"
-echo "Скачиваем модели Qwen..."
-echo "========================================"
+repos = os.environ.get("HF_REPOS", "").split(",")
 
-python3 << 'EOF'
-from huggingface_hub import snapshot_download
-import os
-import time
+for repo in repos:
+    repo = repo.strip()
+    if not repo:
+        continue
 
-t0 = time.time()
+    print("=" * 50)
+    print(f"Скачиваем: {repo}")
+    print("=" * 50)
 
-snapshot_download(
-    repo_id="raderos/qwenpublic",
-    local_dir="/ComfyUI/models",
-    token=os.environ.get("HF_TOKEN"),
-    max_workers=4,  # Оптимальное значение для HTTPS
-)
+    t0 = time.time()
 
-print(f"Qwen готов. ({time.time()-t0:.1f} сек)")
+    snapshot_download(
+        repo_id=repo,
+        local_dir="/ComfyUI/models",
+        token=os.environ.get("HF_TOKEN"),
+        max_workers=workers,
+    )
+
+    print(f"✓ {repo} готов за {time.time()-t0:.1f} сек\n")
+
+print("=" * 50)
+print(f"Все модели готовы за {time.time()-total_start:.1f} сек")
+print("=" * 50)
 EOF
 
 echo ""
