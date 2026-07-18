@@ -56,82 +56,10 @@ RUN cd /ComfyUI/custom_nodes \
     && git clone --depth 1 https://github.com/Fannovel16/comfyui_controlnet_aux.git \
     && cd comfyui_controlnet_aux && pip3 install -r requirements.txt && cd .. \
     && git clone --depth 1 https://github.com/XLabs-AI/x-flux-comfyui.git \
-    && cd x-flux-comfyui && pip3 install -r requirements.txt && python3 setup.py && cd ..
-
-# Ultimate SD Upscale
-RUN cd /ComfyUI/custom_nodes \
-    && git clone --depth 1 --recursive https://github.com/ssitu/ComfyUI_UltimateSDUpscale \
-    && cd ComfyUI_UltimateSDUpscale \
-    && pip3 install -r requirements.txt || true
-
-# Inpaint Crop & Stitch
-RUN cd /ComfyUI/custom_nodes \
-    && git clone --depth 1 https://github.com/lquesada/ComfyUI-Inpaint-CropAndStitch
-
-# Impact Pack
-RUN cd /ComfyUI/custom_nodes \
-    && git clone --depth 1 https://github.com/ltdrdata/ComfyUI-Impact-Pack \
-    && cd ComfyUI-Impact-Pack \
+    && cd x-flux-comfyui \
     && pip3 install -r requirements.txt \
-    && python3 install.py
-
-# Impact Subpack
-RUN cd /ComfyUI/custom_nodes \
-    && git clone --depth 1 https://github.com/ltdrdata/ComfyUI-Impact-Subpack \
-    && cd ComfyUI-Impact-Subpack \
-    && pip3 install -r requirements.txt
-
-# KJNodes
-RUN cd /ComfyUI/custom_nodes \
-    && git clone --depth 1 https://github.com/kijai/ComfyUI-KJNodes.git \
-    && cd ComfyUI-KJNodes \
-    && pip3 install -r requirements.txt
-
-# Essentials
-RUN cd /ComfyUI/custom_nodes \
-    && git clone --depth 1 https://github.com/cubiq/ComfyUI_essentials.git \
-    && cd ComfyUI_essentials \
-    && pip3 install -r requirements.txt || true
-
-# Kontext Inpainting
-RUN cd /ComfyUI/custom_nodes \
-    && git clone --depth 1 https://github.com/ZenAI-Vietnam/ComfyUI-Kontext-Inpainting.git \
-    && cd ComfyUI-Kontext-Inpainting \
-    && pip3 install -r requirements.txt || true
-
-# ===== LAYERSTYLE =====
-RUN cd /ComfyUI/custom_nodes \
-    && git clone --depth 1 https://github.com/chflame163/ComfyUI_LayerStyle \
-    && cd ComfyUI_LayerStyle \
-    && pip3 install -r requirements.txt || true
-
-# ===== REMBG =====
-RUN cd /ComfyUI/custom_nodes \
-    && git clone --depth 1 https://github.com/Jcd1230/rembg-comfyui-node.git \
-    && cd rembg-comfyui-node \
-    && pip3 install -r requirements.txt || true
-
-# ===== RC IMAGE COMPOSITOR =====
-RUN cd /ComfyUI/custom_nodes \
-    && git clone --depth 1 https://github.com/kj863257/ComfyUI_RC_Image_Compositor.git
-
-# ===== INSERT ANYTHING =====
-RUN cd /ComfyUI/custom_nodes \
-    && git clone --depth 1 https://github.com/mo230761/InsertAnything-ComfyUI-official.git \
-    && cd InsertAnything-ComfyUI-official \
-    && if [ -f requirements.txt ]; then pip3 install -r requirements.txt; fi
-
-COPY start.sh /start.sh
-RUN chmod +x /start.sh
-
-WORKDIR /ComfyUI
-
-EXPOSE 8188
-
-CMD ["/start.sh"]    && git clone --depth 1 https://github.com/Fannovel16/comfyui_controlnet_aux.git \
-    && cd comfyui_controlnet_aux && pip3 install -r requirements.txt && cd .. \
-    && git clone --depth 1 https://github.com/XLabs-AI/x-flux-comfyui.git \
-    && cd x-flux-comfyui && pip3 install -r requirements.txt && python3 setup.py && cd ..
+    && (python3 setup.py || true) \
+    && cd ..
 
 # Ultimate SD Upscale
 RUN cd /ComfyUI/custom_nodes \
@@ -139,9 +67,12 @@ RUN cd /ComfyUI/custom_nodes \
     && cd ComfyUI_UltimateSDUpscale \
     && pip3 install -r requirements.txt || true
 
-# Inpaint Crop & Stitch
+# Inpaint Crop & Stitch (с retry на случай сбоя сети)
 RUN cd /ComfyUI/custom_nodes \
-    && git clone --depth 1 https://github.com/lquesada/ComfyUI-Inpaint-CropAndStitch
+    && rm -rf ComfyUI-Inpaint-CropAndStitch \
+    && ( git clone --depth 1 https://github.com/lquesada/ComfyUI-Inpaint-CropAndStitch.git \
+      || (sleep 5 && git clone --depth 1 https://github.com/lquesada/ComfyUI-Inpaint-CropAndStitch.git) \
+      || (sleep 15 && git clone --depth 1 https://github.com/lquesada/ComfyUI-Inpaint-CropAndStitch.git) )
 
 # Impact Pack
 RUN cd /ComfyUI/custom_nodes \
